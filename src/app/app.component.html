@@ -1,4 +1,13 @@
 <div class="container">
+    <div class="row py-2">
+        <div class="col-12">
+            <helphi-user-settings-menu
+                class="float-end"
+                helpRoute=""
+                settingRoute=""
+                profileRoute=""></helphi-user-settings-menu>
+        </div>
+    </div>
     <div class="row">
         <div class="col-6">
             <div class="card">
@@ -13,6 +22,11 @@
                     <button class="btn btn-primary">test</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <app-charts [data]="[100, 25, 53]"></app-charts>
         </div>
     </div>
 </div>

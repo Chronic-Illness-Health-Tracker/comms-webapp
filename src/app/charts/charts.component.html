@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col-12 col-md-6">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="d-flex justify-content-end d-md-none">
+                    <button (click)="toggleChart()" class="btn">
+                        <i
+                            class="fa-light fa-grid-horizontal fa-2xl icon-hover"></i>
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas
+                        baseChart
+                        class="chart"
+                        [type]="chartOneType"
+                        [options]="chartOneOptions"
+                        [data]="chartData">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 flex-grow-1 d-none d-md-block">
+        <div class="card shadow h-100">
+            <div class="card-body d-flex justify-content-center h-100">
+                <div class="chart-container bar">
+                    <canvas
+                        baseChart
+                        class="chart"
+                        type="bar"
+                        [options]="barChartOptions"
+                        [data]="chartData">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
