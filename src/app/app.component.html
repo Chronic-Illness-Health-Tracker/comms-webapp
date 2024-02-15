@@ -1,32 +1,8 @@
-<div class="container">
-    <div class="row py-2">
-        <div class="col-12">
-            <helphi-user-settings-menu
-                class="float-end"
-                helpRoute=""
-                settingRoute=""
-                profileRoute=""></helphi-user-settings-menu>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header">title</div>
-                <div class="card-body">test</div>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="card">
-                <div class="card-header">title</div>
-                <div class="card-body">
-                    <button class="btn btn-primary">test</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <app-charts [data]="[100, 25, 53]"></app-charts>
-        </div>
-    </div>
-</div>
+<helphi-container
+    helpRoute=""
+    settingRoute=""
+    profileRoute=""
+    [sidebarContent]="sidebarContent"
+    [title]="headerService.header">
+    <router-outlet></router-outlet>
+</helphi-container>
