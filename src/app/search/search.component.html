@@ -1,0 +1,10 @@
+<div
+    class="border rounded border-2 d-flex flex-nowrap align-items-center justify-content-between p-1">
+    <input
+        [(ngModel)]="search"
+        (ngModelChange)="searchChanged($event)"
+        type="text"
+        class="border border-0 w-100"
+        placeholder="Search" />
+    <i class="fa-solid fa-magnifying-glass me-2"></i>
+</div>

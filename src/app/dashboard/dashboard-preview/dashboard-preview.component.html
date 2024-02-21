@@ -1,0 +1,82 @@
+<div class="card">
+    <div class="card-body pt-1">
+        <div class="row align-items-center">
+            <div class="col-6 col-md-8 my-2">
+                <h4 class="text-">Patient Preview</h4>
+            </div>
+            @if (extended === false) {
+                <div class="col-6 d-block d-md-none my-2 d-grid">
+                    <button
+                        (click)="viewAll()"
+                        class="btn btn-primary text-dark float-end">
+                        View all
+                    </button>
+                </div>
+            }
+
+            <div
+                class="d-block"
+                [ngClass]="{
+                    'd-md-none ': extended === false,
+                    'col-5': extended === true
+                }">
+                <select
+                    class="form-select"
+                    [(ngModel)]="selectedMobileFilter"
+                    (ngModelChange)="mobileFilterChanged($event)">
+                    <option value="" disabled selected>
+                        No filter selected
+                    </option>
+                    <option value="name-asc">Name (asc)</option>
+                    <option value="name-desc">Name (desc)</option>
+                    <option value="nhsNumber-asc">NHS Number (asc)</option>
+                    <option value="nhsNumber-desc">NHS Number (desc)</option>
+                    <option value="conditionName-asc">Condition (asc)</option>
+                    <option value="condition~Name-desc">
+                        Condition (desc)
+                    </option>
+                    <option value="conditionStatus-asc">Status (asc)</option>
+                    <option value="conditionStatus-desc">Status (desc)</option>
+                </select>
+            </div>
+            <div class="col-12 col-offset-md-3 my-2">
+                <app-search
+                    (output)="searchOutput($event)"
+                    class="float-end"></app-search>
+            </div>
+        </div>
+
+        @if (extended === true) {
+            <div class="row d-none d-md-flex">
+                @for (item of filteredData; track item.nhsNumber) {
+                    <div class="col-4 mb-2">
+                        <app-preview-card [data]="item"></app-preview-card>
+                    </div>
+                }
+            </div>
+        } @else {
+            <app-dashboard-preview-table
+                [data]="filteredData"></app-dashboard-preview-table>
+        }
+
+        @if (extended === false) {
+            <div class="row d-none d-md-block">
+                <div class="col-12">
+                    <button
+                        (click)="viewAll()"
+                        class="btn btn-outline-primary text-dark">
+                        View all
+                    </button>
+                </div>
+            </div>
+        }
+
+        <div class="d-block d-md-none">
+            @for (item of filteredData; track item.nhsNumber) {
+                <div class="mb-2">
+                    <app-preview-card [data]="item"></app-preview-card>
+                </div>
+            }
+        </div>
+    </div>
+</div>
