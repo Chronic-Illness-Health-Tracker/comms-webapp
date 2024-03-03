@@ -11,25 +11,4 @@
  */
 
 export interface User { 
-    id?: string;
-    email?: string;
-    title?: User.TitleEnum;
-    forename?: string;
-    middlenames?: string;
-    lastname?: string;
-    contactNumber?: string;
-    alternateContactNumber?: string;
-}
-export namespace User {
-    export type TitleEnum = 'Mr' | 'Mrs' | 'Miss' | 'Ms' | 'Mx' | 'Dr' | 'Prof' | 'Revd';
-    export const TitleEnum = {
-        Mr: 'Mr' as TitleEnum,
-        Mrs: 'Mrs' as TitleEnum,
-        Miss: 'Miss' as TitleEnum,
-        Ms: 'Ms' as TitleEnum,
-        Mx: 'Mx' as TitleEnum,
-        Dr: 'Dr' as TitleEnum,
-        Prof: 'Prof' as TitleEnum,
-        Revd: 'Revd' as TitleEnum
-    };
 }

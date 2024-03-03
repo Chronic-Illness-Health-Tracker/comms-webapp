@@ -15,6 +15,7 @@ import { HealthCondition } from './healthCondition';
 
 export interface Patient { 
     id?: string;
+    userId?: string;
     email?: string;
     title?: Patient.TitleEnum;
     forename?: string;

@@ -8,6 +8,7 @@ import { GpSurgeryControllerService } from './api/gpSurgeryController.service';
 import { HealthConditionControllerService } from './api/healthConditionController.service';
 import { OrganisationControllerService } from './api/organisationController.service';
 import { PatientControllerService } from './api/patientController.service';
+import { RegistrationControllerService } from './api/registrationController.service';
 import { UserControllerService } from './api/userController.service';
 
 @NgModule({
@@ -20,6 +21,7 @@ import { UserControllerService } from './api/userController.service';
     HealthConditionControllerService,
     OrganisationControllerService,
     PatientControllerService,
+    RegistrationControllerService,
     UserControllerService ]
 })
 export class ApiModule {
