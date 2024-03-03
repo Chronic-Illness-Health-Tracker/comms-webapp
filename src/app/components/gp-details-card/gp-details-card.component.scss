@@ -1,0 +1,13 @@
+.dropdown-items-container {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+@import 'bootstrap/scss/functions';
+
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+
+#patient-search {
+    border-color: $card-border-color;
+}

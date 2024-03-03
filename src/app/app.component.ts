@@ -1,20 +1,10 @@
 import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
 import { RouterOutlet } from '@angular/router';
 import {
     HelphiContainerComponent,
-    HelphiSidebarComponent,
-    UserSettingsMenuComponent,
+    SidebarConfig,
 } from '@helphi/helphi-common-ui';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { ChartConfiguration, ChartData, ChartOptions, Color } from 'chart.js';
-import {
-    NgChartsConfiguration,
-    NgChartsModule,
-    ThemeService,
-} from 'ng2-charts';
-import { ChartsComponent } from './charts/charts.component';
+
 import { HeaderService } from './svc/header.service';
 
 @Component({
@@ -27,6 +17,14 @@ import { HeaderService } from './svc/header.service';
 export class AppComponent {
     constructor(protected headerService: HeaderService) {}
     title = 'comms-webapp';
+
+    sidebarConfig: SidebarConfig = {
+        showAddDropdown: true,
+        canAddPatients: true,
+        canAddConditions: true,
+        addPatientRoute: ['patient', 'new'],
+        addConditionRoute: [],
+    };
 
     sidebarContent = [
         'Hypertrophic Cardiomyopathy (HCM)',

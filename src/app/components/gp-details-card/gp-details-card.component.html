@@ -1,0 +1,87 @@
+<div class="card">
+    <div class="card-header">GP Details</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-5 col-xxl-4">
+                <div
+                    ngbDropdown
+                    class="d-grid flex-grow-1 me-2"
+                    autoClose="outside">
+                    <button
+                        id="patient-search"
+                        ngbDropdownToggle
+                        class="btn d-flex justify-content-between align-items-center text-truncate"
+                        type="button"
+                        aria-expanded="false">
+                        No GP selected
+                    </button>
+
+                    <ul ngbDropdownMenu class="dropdown-menu w-100">
+                        <div class="px-2">
+                            <input
+                                type="text"
+                                class="form-control mt-1"
+                                placeholder="Search for GP..." />
+                        </div>
+                        <hr />
+                        <div class="dropdown-items-container mt-2 m-auto"></div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-6">
+                <label class="form-label">GP Name</label>
+                <input
+                    disabled
+                    type="text"
+                    class="form-control"
+                    placeholder="Dr House" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">GP Email</label>
+                <input
+                    disabled
+                    type="text"
+                    class="form-control"
+                    placeholder="example@example.com" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <label class="form-label">Surgery Name</label>
+                <input
+                    disabled
+                    type="text"
+                    class="form-control"
+                    placeholder="Healy healy" />
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label">Surgery Address</label>
+                <input
+                    disabled
+                    type="text"
+                    class="form-control"
+                    placeholder="123 Steet Road, PL1 1QW" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <label class="form-label">Surgery Email</label>
+                <input
+                    disabled
+                    type="text"
+                    class="form-control"
+                    placeholder="example@example.com" />
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label">Surgery Telephone</label>
+                <input
+                    disabled
+                    type="text"
+                    class="form-control"
+                    placeholder="123456789" />
+            </div>
+        </div>
+    </div>
+</div>
