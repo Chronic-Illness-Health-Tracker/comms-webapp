@@ -2,30 +2,129 @@
     <div class="card-header">GP Details</div>
     <div class="card-body">
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-5 col-xxl-4">
+            <div class="col-12 col-md-6">
                 <div
                     ngbDropdown
                     class="d-grid flex-grow-1 me-2"
                     autoClose="outside">
                     <button
-                        id="patient-search"
+                        [ngClass]="{
+                            'is-invalid': submitted && !selectedGpSurgery
+                        }"
+                        [disabled]="!editable"
+                        id="gp-surgery-search"
                         ngbDropdownToggle
-                        class="btn d-flex justify-content-between align-items-center text-truncate"
+                        class="btn d-flex justify-content-between align-items-center text-truncate form-control"
                         type="button"
                         aria-expanded="false">
-                        No GP selected
+                        @if (selectedGpSurgery) {
+                            {{ selectedGpSurgery.name }}
+                        } @else {
+                            No GP surgery selected
+                        }
                     </button>
 
                     <ul ngbDropdownMenu class="dropdown-menu w-100">
                         <div class="px-2">
                             <input
+                                [(ngModel)]="gpSurgerySearch"
+                                (ngModelChange)="onGpSurgerySearch($event)"
                                 type="text"
                                 class="form-control mt-1"
-                                placeholder="Search for GP..." />
+                                placeholder="Search for GP surgery..." />
                         </div>
                         <hr />
-                        <div class="dropdown-items-container mt-2 m-auto"></div>
+                        <div class="dropdown-items-container mt-2 m-auto">
+                            @if (gpSurgeries && gpSurgeries.length > 0) {
+                                @for (surgery of gpSurgeries; track $index) {
+                                    <li>
+                                        <button
+                                            (click)="setGpSurgery(surgery)"
+                                            ngbDropdownItem
+                                            class="dropdown-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-11">
+                                                    <p class="text-wrap m-0">
+                                                        {{ surgery.name }}
+                                                    </p>
+                                                </div>
+
+                                                @if (
+                                                    selectedGpSurgery ===
+                                                    surgery
+                                                ) {
+                                                    <div class="col-1">
+                                                        <i
+                                                            class="fa-light fa-check float-end"></i>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </button>
+                                    </li>
+                                }
+                            } @else {
+                                <p class="fst-italic text-center">
+                                    No GP surgeries could be found
+                                </p>
+                            }
+                        </div>
                     </ul>
+                    <div class="invalid-feedback">
+                        A Gp surgery must be selected.
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div
+                    ngbDropdown
+                    class="d-grid flex-grow-1 me-2"
+                    autoClose="outside">
+                    <button
+                        [ngClass]="{
+                            'is-invalid': submitted && !selectedGp && !disableGP
+                        }"
+                        [disabled]="disableGP || !editable"
+                        id="gp-search"
+                        ngbDropdownToggle
+                        class="btn d-flex justify-content-between align-items-center text-truncate form-control"
+                        type="button"
+                        aria-expanded="false">
+                        No GP selected
+                    </button>
+                    <ul ngbDropdownMenu class="dropdown-menu w-100">
+                        <div class="dropdown-items-container mt-2 m-auto">
+                            @if (gps) {
+                                @for (gp of gps; track $index) {
+                                    <li>
+                                        <button
+                                            (click)="setGp(gp)"
+                                            ngbDropdownItem
+                                            class="dropdown-item">
+                                            <div class="row align-items-center">
+                                                <div class="col-11">
+                                                    <p class="text-wrap m-0">
+                                                        {{ gpName(gp) }}
+                                                    </p>
+                                                </div>
+
+                                                @if (selectedGp === gp) {
+                                                    <div class="col-1">
+                                                        <i
+                                                            class="fa-light fa-check float-end"></i>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </button>
+                                    </li>
+                                }
+                            } @else {
+                                <p class="fst-italic text-center">
+                                    No GPs could be found
+                                </p>
+                            }
+                        </div>
+                    </ul>
+                    <div class="invalid-feedback">A GP must be selected.</div>
                 </div>
             </div>
         </div>
@@ -36,7 +135,7 @@
                     disabled
                     type="text"
                     class="form-control"
-                    placeholder="Dr House" />
+                    [value]="gpName(selectedGp)" />
             </div>
             <div class="col-md-6">
                 <label class="form-label">GP Email</label>
@@ -44,7 +143,7 @@
                     disabled
                     type="text"
                     class="form-control"
-                    placeholder="example@example.com" />
+                    [value]="selectedGp?.email" />
             </div>
         </div>
         <div class="row">
@@ -54,7 +153,7 @@
                     disabled
                     type="text"
                     class="form-control"
-                    placeholder="Healy healy" />
+                    [value]="selectedGp?.surgery?.name" />
             </div>
             <div class="col-12 col-md-6">
                 <label class="form-label">Surgery Address</label>
@@ -62,7 +161,7 @@
                     disabled
                     type="text"
                     class="form-control"
-                    placeholder="123 Steet Road, PL1 1QW" />
+                    [value]="surgeryAddress" />
             </div>
         </div>
         <div class="row">
@@ -72,7 +171,7 @@
                     disabled
                     type="text"
                     class="form-control"
-                    placeholder="example@example.com" />
+                    [value]="selectedGp?.surgery?.email" />
             </div>
             <div class="col-12 col-md-6">
                 <label class="form-label">Surgery Telephone</label>
@@ -80,7 +179,7 @@
                     disabled
                     type="text"
                     class="form-control"
-                    placeholder="123456789" />
+                    [value]="selectedGp?.surgery?.contactNumber" />
             </div>
         </div>
     </div>

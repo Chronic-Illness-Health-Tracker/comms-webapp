@@ -1,0 +1,139 @@
+<div class="card">
+    <div class="card-header">Add patient</div>
+    <div class="card-body">
+        <div class="row">
+            @if (!creatingNewPatient) {
+                <div class="col-5">
+                    <label class="form-label">Patient</label>
+                    <div class="d-flex align-items-center">
+                        <div
+                            ngbDropdown
+                            class="d-grid flex-grow-1 me-2"
+                            autoClose="outside">
+                            <button
+                                id="patient-search"
+                                ngbDropdownToggle
+                                class="btn d-flex justify-content-between align-items-center text-truncate"
+                                type="button"
+                                aria-expanded="false">
+                                @if (_selectedPatient) {
+                                    {{ _selectedPatient.forename }}
+                                } @else {
+                                    No patient selected
+                                }
+                            </button>
+
+                            <ul ngbDropdownMenu class="dropdown-menu w-100">
+                                <div class="px-2">
+                                    <input
+                                        [(ngModel)]="patientSearch"
+                                        (ngModelChange)="
+                                            patientSearchChanged($event)
+                                        "
+                                        type="text"
+                                        class="form-control mt-1"
+                                        placeholder="Search for patient..." />
+                                </div>
+                                <hr />
+                                @if (patients.length === 0) {
+                                    <div class="row">
+                                        <div
+                                            class="col-12 d-flex justify-content-center">
+                                            <p
+                                                class="fst-italic m-auto d-flex fw-light">
+                                                No patient could be found. Do
+                                                you want to create a new
+                                                patient?
+                                            </p>
+                                        </div>
+                                        <div
+                                            class="col-12 d-flex justify-content-center mt-2">
+                                            <button
+                                                (click)="createNewPatient()"
+                                                class="btn btn-primary">
+                                                Create new patient
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+
+                                <div
+                                    class="dropdown-items-container mt-2 m-auto">
+                                    @for (item of patients; track $index) {
+                                        <li>
+                                            <button
+                                                (click)="patientSelected(item)"
+                                                ngbDropdownItem
+                                                class="dropdown-item">
+                                                <div
+                                                    class="row align-items-center">
+                                                    <div class="col-11">
+                                                        <p
+                                                            class="text-wrap m-0">
+                                                            {{
+                                                                patientName(
+                                                                    item
+                                                                )
+                                                            }}
+                                                        </p>
+                                                    </div>
+
+                                                    @if (
+                                                        item ===
+                                                        _selectedPatient
+                                                    ) {
+                                                        <div class="col-1">
+                                                            <i
+                                                                class="fa-light fa-check float-end"></i>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </button>
+                                        </li>
+                                    }
+                                </div>
+                            </ul>
+                        </div>
+                        <i class="fa-solid fa-xmark fa-xl"></i>
+                    </div>
+                </div>
+            }
+
+            <div class="col-5">
+                <label class="form-label">Condition</label>
+                <div class="d-flex align-items-center">
+                    <div
+                        ngbDropdown
+                        class="d-grid flex-grow-1 me-2"
+                        autoClose="outside">
+                        <button
+                            id="patient-search"
+                            ngbDropdownToggle
+                            class="btn d-flex justify-content-between align-items-center text-truncate"
+                            type="button"
+                            aria-expanded="false">
+                            No condition selected
+                        </button>
+
+                        <ul ngbDropdownMenu class="dropdown-menu w-100">
+                            <div class="px-2">
+                                <input
+                                    [(ngModel)]="patientSearch"
+                                    (ngModelChange)="
+                                        patientSearchChanged($event)
+                                    "
+                                    type="text"
+                                    class="form-control mt-1"
+                                    placeholder="Search for condition..." />
+                            </div>
+                            <hr />
+                            <div
+                                class="dropdown-items-container mt-2 m-auto"></div>
+                        </ul>
+                    </div>
+                    <i class="fa-solid fa-xmark fa-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

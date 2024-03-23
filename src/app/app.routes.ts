@@ -7,6 +7,18 @@ export const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent },
     {
         path: 'patient',
-        children: [{ path: 'new', component: PatientEditorComponent }],
+        children: [
+            { path: 'new', component: PatientEditorComponent },
+            {
+                path: ':patientId',
+                children: [
+                    {
+                        path: 'edit',
+                        component: PatientEditorComponent,
+                        data: { editing: true },
+                    },
+                ],
+            },
+        ],
     },
 ];

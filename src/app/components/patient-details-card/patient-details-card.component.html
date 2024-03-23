@@ -1,17 +1,24 @@
 <div class="card">
     <div class="card-header">Patient details</div>
     <div class="card-body">
-        <form [formGroup]="form">
+        <form [formGroup]="form" class="needs-validation" novalidate>
             <div class="row">
                 <div class="col-6">
-                    <label class="form-label">NHS Number</label>
+                    <label class="form-label">NHS Number *</label>
                     <input
                         formControlName="nhsNumber"
                         type="text"
-                        class="form-control" />
+                        class="form-control"
+                        [ngClass]="{
+                            'is-invalid':
+                                submitted && form.controls.nhsNumber.errors
+                        }" />
+                    <div class="invalid-feedback">
+                        NHS number cannot be empty.
+                    </div>
                 </div>
                 <div class="col-6">
-                    <label class="form-label">Date of Birth</label>
+                    <label class="form-label">Date of Birth *</label>
                     <div class="input-group">
                         <input
                             formControlName="dateOfBirth"
@@ -20,33 +27,53 @@
                             ngbDatepicker
                             #d="ngbDatepicker"
                             [minDate]="{ year: 1900, month: 1, day: 1 }"
-                            [maxDate]="maxDate" />
-
+                            [maxDate]="maxDate"
+                            [ngClass]="{
+                                'is-invalid':
+                                    submitted &&
+                                    form.controls.dateOfBirth.errors
+                            }" />
                         <button
                             [disabled]="!editable"
-                            class="btn btn-outline-dark border border-secondary"
+                            class="btn btn-outline-dark border border-secondary rounded-end"
                             (click)="d.toggle()"
                             type="button">
                             <i class="fa-light fa-calendar-days"></i>
                         </button>
+                        <div class="invalid-feedback">
+                            Date of birth cannot be empty.
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="row mt-1">
                 <div class="col-4 col-md-2 col-xxl-1">
-                    <label class="form-label">Title</label>
-                    <select formControlName="title" class="form-select">
+                    <label class="form-label">Title *</label>
+                    <select
+                        formControlName="title"
+                        class="form-select"
+                        [ngClass]="{
+                            'is-invalid':
+                                submitted && form.controls.title.errors
+                        }">
                         @for (item of titleValues; track $index) {
                             <option [value]="item">{{ item }}</option>
                         }
                     </select>
+                    <div class="invalid-feedback">Title cannot be empty.</div>
                 </div>
                 <div class="col-12 col-md-4 col-xxl-3">
-                    <label class="form-label">Forename</label>
+                    <label class="form-label">Forename *</label>
                     <input
+                        required
                         formControlName="forename"
                         type="text"
-                        class="form-control" />
+                        class="form-control"
+                        [ngClass]="{
+                            'is-invalid':
+                                submitted && form.controls.forename.errors
+                        }" />
+                    <div class="invalid-feedback">Forname cannot be empty.</div>
                 </div>
                 <div class="col-12 col-md-6 col-xxl-4">
                     <label class="form-label">Middle Names</label>
@@ -56,11 +83,18 @@
                         class="form-control" />
                 </div>
                 <div class="col-12 col-xl-6 col-xxl-4">
-                    <label class="form-label">Lastname</label>
+                    <label class="form-label">Lastname *</label>
                     <input
                         formControlName="lastname"
                         type="text"
-                        class="form-control" />
+                        class="form-control"
+                        [ngClass]="{
+                            'is-invalid':
+                                submitted && form.controls.lastname.errors
+                        }" />
+                    <div class="invalid-feedback">
+                        Lastname cannot be empty.
+                    </div>
                 </div>
             </div>
             @if (editable) {
@@ -78,11 +112,19 @@
                             class="form-control" />
                     </div>
                     <div class="col-12 col-md-6 col-xxl-4">
-                        <label class="form-label">Contact Number</label>
+                        <label class="form-label">Contact Number *</label>
                         <input
                             formControlName="contactNumber"
                             type="tel"
-                            class="form-control" />
+                            class="form-control"
+                            [ngClass]="{
+                                'is-invalid':
+                                    submitted &&
+                                    form.controls.contactNumber.errors
+                            }" />
+                        <div class="invalid-feedback">
+                            Contact number cannot be empty.
+                        </div>
                     </div>
                     <div class="col-12 col-md-6 col-xxl-4">
                         <label class="form-label"
@@ -96,11 +138,20 @@
                 </div>
                 <div formGroupName="address" class="row mt-1">
                     <div class="col-12 col-sm-4">
-                        <label class="form-label">Address Line One</label>
+                        <label class="form-label">Address Line One *</label>
                         <input
                             formControlName="addresslineOne"
                             type="text"
-                            class="form-control" />
+                            class="form-control"
+                            [ngClass]="{
+                                'is-invalid':
+                                    submitted &&
+                                    form.controls.address.controls
+                                        .addresslineOne.errors
+                            }" />
+                        <div class="invalid-feedback">
+                            Address cannot be empty.
+                        </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <label class="form-label">Address Line Two</label>
@@ -110,11 +161,20 @@
                             class="form-control" />
                     </div>
                     <div class="col-12 col-sm-4">
-                        <label class="form-label">Postcode</label>
+                        <label class="form-label">Postcode *</label>
                         <input
                             formControlName="postcode"
                             type="text"
-                            class="form-control" />
+                            class="form-control"
+                            [ngClass]="{
+                                'is-invalid':
+                                    submitted &&
+                                    form.controls.address.controls.postcode
+                                        .errors
+                            }" />
+                        <div class="invalid-feedback">
+                            Postcode cannot be empty.
+                        </div>
                     </div>
                 </div>
             }

@@ -9,7 +9,12 @@ import {
     Output,
     SimpleChanges,
 } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+    FormBuilder,
+    FormsModule,
+    ReactiveFormsModule,
+    Validators,
+} from '@angular/forms';
 import { Patient } from '../../../api/model/patient';
 import { Subject, takeUntil } from 'rxjs';
 import {
@@ -19,6 +24,7 @@ import {
     NgbDateStruct,
     NgbDatepickerModule,
 } from '@ng-bootstrap/ng-bootstrap';
+import { NgClass } from '@angular/common';
 
 @Injectable()
 export class CustomDateParserFormatter extends NgbDateParserFormatter {
@@ -50,7 +56,7 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
 @Component({
     selector: 'app-patient-details-card',
     standalone: true,
-    imports: [NgbDatepickerModule, FormsModule, ReactiveFormsModule],
+    imports: [NgbDatepickerModule, FormsModule, ReactiveFormsModule, NgClass],
     providers: [
         {
             provide: NgbDateParserFormatter,
@@ -76,31 +82,35 @@ export class PatientDetailsCardComponent
     protected get titleValues(): Array<Patient.TitleEnum> {
         return Object.values(Patient.TitleEnum);
     }
-
+    @Input() submitted: boolean = false;
     @Input() editable: boolean = false;
     @Input() patient?: Patient;
     @Output() changes = new EventEmitter<Patient>();
+    @Output() valid = new EventEmitter<boolean>();
 
     protected form = this.fb.group({
-        nhsNumber: this.fb.nonNullable.control(''),
-        dateOfBirth: this.fb.nonNullable.control<NgbDateStruct>({
-            year: 2000,
-            month: 1,
-            day: 1,
-        }),
-        title: this.fb.nonNullable.control<Patient.TitleEnum>(
-            Patient.TitleEnum.Mr
+        nhsNumber: this.fb.nonNullable.control('', Validators.required),
+        dateOfBirth: this.fb.nonNullable.control<NgbDateStruct | undefined>(
+            undefined,
+            Validators.required
         ),
-        forename: this.fb.nonNullable.control(''),
+        title: this.fb.nonNullable.control<Patient.TitleEnum | undefined>(
+            undefined,
+            Validators.required
+        ),
+        forename: this.fb.nonNullable.control('', Validators.required),
         middlenames: this.fb.nonNullable.control(''),
-        lastname: this.fb.nonNullable.control(''),
-        contactNumber: this.fb.nonNullable.control(''),
+        lastname: this.fb.nonNullable.control('', Validators.required),
+        contactNumber: this.fb.nonNullable.control('', Validators.required),
         alternateContactNumber: this.fb.nonNullable.control(''),
         email: this.fb.nonNullable.control(''),
         address: this.fb.nonNullable.group({
-            addresslineOne: this.fb.nonNullable.control(''),
+            addresslineOne: this.fb.nonNullable.control(
+                '',
+                Validators.required
+            ),
             addresslineTwo: this.fb.nonNullable.control(''),
-            postcode: this.fb.nonNullable.control(''),
+            postcode: this.fb.nonNullable.control('', Validators.required),
         }),
     });
 
@@ -111,21 +121,7 @@ export class PatientDetailsCardComponent
             this.form.disable();
         }
 
-        if (this.patient) {
-            const patientNoDob: Omit<Patient, 'dateOfBirth'> = this.patient;
-
-            this.form.patchValue(patientNoDob);
-
-            if (this.patient.dateOfBirth) {
-                this.form.patchValue({
-                    dateOfBirth: {
-                        year: this.patient.dateOfBirth.getUTCFullYear(),
-                        month: this.patient.dateOfBirth.getUTCMonth(),
-                        day: this.patient.dateOfBirth.getUTCDate(),
-                    },
-                });
-            }
-        }
+        this.patchForm();
         this.form.valueChanges
             .pipe(takeUntil(this.onDestroy$))
             .subscribe(() => {
@@ -143,12 +139,37 @@ export class PatientDetailsCardComponent
                     patient.gp = this.patient?.gp;
                     patient.conditions = this.patient?.conditions;
                 }
+                if (this.form.valid) {
+                    this.changes.emit(patient);
+                }
 
-                this.changes.emit(patient);
+                this.valid.emit(this.form.valid);
             });
     }
 
+    patchForm() {
+        if (this.patient) {
+            const patientNoDob: Omit<Patient, 'dateOfBirth'> = this.patient;
+
+            this.form.patchValue(patientNoDob);
+
+            if (this.patient.dateOfBirth) {
+                const dob = new Date(this.patient.dateOfBirth);
+                this.form.patchValue({
+                    dateOfBirth: {
+                        year: dob.getUTCFullYear(),
+                        month: dob.getUTCMonth(),
+                        day: dob.getUTCDate(),
+                    },
+                });
+            }
+
+            this.valid.emit(this.form.valid);
+        }
+    }
+
     ngOnChanges(changes: SimpleChanges): void {
+        this.patchForm();
         if (this.editable) {
             this.form.enable();
         } else {

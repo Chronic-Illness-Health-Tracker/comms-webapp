@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body pt-1">
         <div class="row align-items-center">
-            <div class="col-6 col-md-8 my-2">
+            <div class="col-6 col-md-6 col-lg-8 col-xxl-9 my-2 order-1">
                 <h4 class="text-">Patient Preview</h4>
             </div>
             @if (extended === false) {
@@ -13,12 +13,11 @@
                     </button>
                 </div>
             }
-
             <div
-                class="d-block"
+                class="d-block order-3"
                 [ngClass]="{
-                    'd-md-none ': extended === false,
-                    'col-5': extended === true
+                    'd-md-none': extended === false,
+                    'col-12 col-md-5 col-lg-4': extended === true
                 }">
                 <select
                     class="form-select"
@@ -39,25 +38,31 @@
                     <option value="conditionStatus-desc">Status (desc)</option>
                 </select>
             </div>
-            <div class="col-12 col-offset-md-3 my-2">
-                <app-search
-                    (output)="searchOutput($event)"
-                    class="float-end"></app-search>
+            <div
+                class="my-2 col-sm-12 col-md-6 col-lg-4 col-xxl-3"
+                [ngClass]="{
+                    'order-4 order-md-2': extended === true
+                }">
+                <app-search (output)="searchOutput($event)"></app-search>
             </div>
         </div>
 
-        @if (extended === true) {
-            <div class="row d-none d-md-flex">
-                @for (item of filteredData; track item.nhsNumber) {
-                    <div class="col-4 mb-2">
-                        <app-preview-card [data]="item"></app-preview-card>
-                    </div>
-                }
-            </div>
-        } @else {
-            <app-dashboard-preview-table
-                [data]="filteredData"></app-dashboard-preview-table>
-        }
+        <div
+            class="row mt-2"
+            [ngClass]="{
+                'd-flex d-md-none': extended === false
+            }">
+            @for (item of filteredData; track item.nhsNumber) {
+                <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-2">
+                    <app-preview-card [data]="item"></app-preview-card>
+                </div>
+            }
+        </div>
+        <app-dashboard-preview-table
+            [ngClass]="{
+                'd-none': extended === true
+            }"
+            [data]="filteredData"></app-dashboard-preview-table>
 
         @if (extended === false) {
             <div class="row d-none d-md-block">
@@ -70,13 +75,5 @@
                 </div>
             </div>
         }
-
-        <div class="d-block d-md-none">
-            @for (item of filteredData; track item.nhsNumber) {
-                <div class="mb-2">
-                    <app-preview-card [data]="item"></app-preview-card>
-                </div>
-            }
-        </div>
     </div>
 </div>
