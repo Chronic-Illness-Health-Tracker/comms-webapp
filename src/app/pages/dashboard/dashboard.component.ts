@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { PageComponent } from '../../base/page.component';
 import { HeaderService } from '../../svc/header.service';
 import { ChartsComponent } from '../../components/charts/charts.component';
 import { ConditionFilterPanelComponent } from '../../components/condition-filter-panel/condition-filter-panel.component';
 import { DashboardPreviewComponent } from '../../components/dashboard/dashboard-preview/dashboard-preview.component';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, filter, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-dashboard',

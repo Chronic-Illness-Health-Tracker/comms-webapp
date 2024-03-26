@@ -242,6 +242,75 @@ export class OrganisationControllerService {
     }
 
     /**
+     * List of Organisations
+     *
+     * @param organisationName
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public listOrganisations(
+        organisationName: string,
+        observe?: 'body',
+        reportProgress?: boolean
+    ): Observable<Array<Organisation>>;
+    public listOrganisations(
+        organisationName: string,
+        observe?: 'response',
+        reportProgress?: boolean
+    ): Observable<HttpResponse<Array<Organisation>>>;
+    public listOrganisations(
+        organisationName: string,
+        observe?: 'events',
+        reportProgress?: boolean
+    ): Observable<HttpEvent<Array<Organisation>>>;
+    public listOrganisations(
+        organisationName: string,
+        observe: any = 'body',
+        reportProgress: boolean = false
+    ): Observable<any> {
+        if (organisationName === null || organisationName === undefined) {
+            throw new Error(
+                'Required parameter organisationName was null or undefined when calling listOrganisations.'
+            );
+        }
+
+        let queryParameters = new HttpParams({
+            encoder: new CustomHttpUrlEncodingCodec(),
+        });
+        if (organisationName !== undefined && organisationName !== null) {
+            queryParameters = queryParameters.set(
+                'organisationName',
+                <any>organisationName
+            );
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = ['*/*', 'application/json'];
+        const httpHeaderAcceptSelected: string | undefined =
+            this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [];
+
+        return this.httpClient.request<Array<Organisation>>(
+            'get',
+            `${this.basePath}/organisation`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress,
+            }
+        );
+    }
+
+    /**
      * update a Organisation
      *
      * @param body

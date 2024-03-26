@@ -10,6 +10,7 @@ import { Gp, PatientControllerService } from '../../../api';
 import { Subject, lastValueFrom, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AddPatientCardComponent } from '../../components/add-patient-card/add-patient-card.component';
+import { SaveBarComponent } from '../../components/save-bar/save-bar.component';
 
 @Component({
     selector: 'app-patient-editor',
@@ -20,6 +21,7 @@ import { AddPatientCardComponent } from '../../components/add-patient-card/add-p
         GpDetailsCardComponent,
         AddPatientCardComponent,
         FormsModule,
+        SaveBarComponent,
     ],
     providers: [PatientControllerService],
     templateUrl: './patient-editor.component.html',

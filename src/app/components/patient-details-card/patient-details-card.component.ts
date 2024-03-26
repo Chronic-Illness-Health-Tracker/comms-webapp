@@ -18,8 +18,6 @@ import {
 import { Patient } from '../../../api/model/patient';
 import { Subject, takeUntil } from 'rxjs';
 import {
-    NgbDate,
-    NgbDateAdapter,
     NgbDateParserFormatter,
     NgbDateStruct,
     NgbDatepickerModule,

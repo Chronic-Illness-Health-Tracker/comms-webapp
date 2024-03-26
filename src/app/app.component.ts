@@ -23,7 +23,7 @@ export class AppComponent {
         canAddPatients: true,
         canAddConditions: true,
         addPatientRoute: ['patient', 'new'],
-        addConditionRoute: [],
+        addConditionRoute: ['condition', 'new'],
     };
 
     sidebarContent = [

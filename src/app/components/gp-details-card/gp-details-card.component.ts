@@ -24,11 +24,12 @@ import {
     takeUntil,
 } from 'rxjs';
 import { NgClass } from '@angular/common';
+import { SelectDropdownComponent } from '../select-dropdown/select-dropdown.component';
 
 @Component({
     selector: 'app-gp-details-card',
     standalone: true,
-    imports: [NgbDropdownModule, FormsModule, NgClass],
+    imports: [NgbDropdownModule, FormsModule, NgClass, SelectDropdownComponent],
     providers: [GpSurgeryControllerService, GpControllerService],
     templateUrl: './gp-details-card.component.html',
     styleUrl: './gp-details-card.component.scss',
@@ -36,30 +37,13 @@ import { NgClass } from '@angular/common';
 export class GpDetailsCardComponent implements OnInit, OnDestroy, OnChanges {
     private onDestroy$ = new Subject<boolean>();
 
-    protected gpSurgerySearch = '';
-    protected gpSurgerySearchChangedSubject: Subject<string> =
-        new Subject<string>();
-
     protected disableGP: boolean = false;
 
-    protected gpSurgeries?: Array<GpSurgery> = [
-        { name: 'HEALY HEALY WOO WOO' },
-        { name: 'nOT SO HEALY HEALY WOO WOO' },
-    ];
-    protected gps?: Array<Gp>;
+    protected gpSurgeries: Array<GpSurgery> = [];
+    protected gps: Array<Gp> = [];
 
     protected selectedGpSurgery?: GpSurgery | null;
     protected selectedGp?: Gp | null;
-
-    protected form: FormGroup = this.fb.nonNullable.group({
-        forename: this.fb.nonNullable.control(''),
-        email: this.fb.nonNullable.control(''),
-        surgery: this.fb.nonNullable.group({
-            name: this.fb.nonNullable.control(''),
-            email: this.fb.nonNullable.control(''),
-            address: this.fb.nonNullable.group({}),
-        }),
-    });
 
     protected gpName(gp?: Gp | null): string {
         const name: string = '';
@@ -72,6 +56,10 @@ export class GpDetailsCardComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             return '';
         }
+    }
+
+    protected gpSurgeryName(gpSurgery?: GpSurgery): string {
+        return gpSurgery?.name ? gpSurgery.name : '';
     }
 
     protected get surgeryAddress(): string {
@@ -94,7 +82,7 @@ export class GpDetailsCardComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(
         private fb: FormBuilder,
-        private gpSurgeryService: GpSurgeryControllerService,
+        protected gpSurgeryService: GpSurgeryControllerService,
         private gpService: GpControllerService
     ) {}
 
@@ -114,16 +102,6 @@ export class GpDetailsCardComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             this.disableGP = true;
         }
-
-        this.gpSurgerySearchChangedSubject
-            .pipe(
-                debounceTime(200),
-                distinctUntilChanged(),
-                takeUntil(this.onDestroy$)
-            )
-            .subscribe(value => {
-                this.searchForGpSurgery(value);
-            });
     }
 
     ngOnDestroy(): void {
@@ -132,43 +110,34 @@ export class GpDetailsCardComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log('gp changes');
-        console.log('selectedGP', this.selectedGp);
-        console.log('selectedGPsur', this.selectedGpSurgery);
-        console.log('gp', this.gp);
         if (!this.selectedGp && !this.selectedGpSurgery) {
             if (this.gp) {
-                console.log('SETTING NEW GP');
                 this.selectedGp = this.gp;
                 this.selectedGpSurgery = this.gp.surgery;
             }
         }
     }
 
-    setGpSurgery(gpSurgery: GpSurgery | null) {
-        this.selectedGpSurgery = gpSurgery;
+    setGpSurgery(gpSurgery: unknown) {
+        this.selectedGpSurgery = gpSurgery as GpSurgery;
         if (!gpSurgery) {
             this.disableGP = true;
         } else {
             this.disableGP = false;
-            this.getGps(gpSurgery?.id);
+            this.getGps((gpSurgery as GpSurgery)?.id);
         }
 
         this.setGp(null);
     }
 
-    setGp(gp: Gp | null) {
-        this.selectedGp = gp;
-        this.change.emit(gp);
+    setGp(gp: unknown | null) {
+        this.selectedGp = gp as Gp | null;
+        this.change.emit(gp as Gp | null);
         if (gp && gp !== null) {
             this.valid.emit(true);
         } else {
             this.valid.emit(false);
         }
-    }
-
-    onGpSurgerySearch(name: string) {
-        this.gpSurgerySearchChangedSubject.next(name);
     }
 
     searchForGpSurgery(surgeryName: string) {
