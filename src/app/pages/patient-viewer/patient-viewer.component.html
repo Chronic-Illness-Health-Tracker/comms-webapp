@@ -4,8 +4,16 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <p class="fs-4 mb-1">Hermann P. Schnitzel</p>
-                        <p>871 272819 712</p>
+                        <p class="fs-4 mb-1">
+                            {{
+                                displayName(
+                                    patient?.forename,
+                                    patient?.middlenames,
+                                    patient?.lastname
+                                )
+                            }}
+                        </p>
+                        <p>{{ patient?.nhsNumber }}</p>
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -14,13 +22,15 @@
                     </div>
                     <div class="col-12 d-flex flex-wrap">
                         <p class="me-4 text-nowrap mb-1">
-                            Date of Birth: 03/05/1999
+                            Date of Birth:
+                            {{ patient?.dateOfBirth | date: 'd/M/yy' }}
                         </p>
                         <p class="me-4 text-nowrap mb-1">
-                            Contact Number: 01824 171727
+                            Contact Number: {{ patient?.contactNumber }}
                         </p>
                         <p class="text-nowrap mb-1">
-                            Alternate Contact Number: 01824 171727
+                            Alternate Contact Number:
+                            {{ patient?.alternateContactNumber }}
                         </p>
                     </div>
                 </div>
@@ -30,22 +40,39 @@
                     </div>
                     <div class="col-12 d-flex flex-wrap">
                         <p class="me-4 text-nowrap mb-1">
-                            Surgery Name: Healy healy group
+                            Surgery Name: {{ patient?.gp?.surgery?.name }}
                         </p>
                         <p class="me-4 text-nowrap mb-1">
-                            Surgery Address: 4 Privet Drive, PL4 8AA
+                            Surgery Address:
+                            {{
+                                displayAddress(
+                                    patient?.gp?.surgery?.address
+                                        ?.addresslineOne,
+                                    patient?.gp?.surgery?.address
+                                        ?.addresslineTwo,
+                                    patient?.gp?.surgery?.address?.postcode
+                                )
+                            }}
                         </p>
                         <p class="me-4 text-nowrap mb-1">
-                            Surgery Contact Number: 01824 171727
+                            Surgery Contact Number:
+                            {{ patient?.gp?.surgery?.contactNumber }}
                         </p>
                         <p class="me-4 text-nowrap mb-1">
-                            GP Name: Gregory M. House
+                            GP Name:
+                            {{
+                                displayName(
+                                    patient?.gp?.forename,
+                                    patient?.gp?.middlenames,
+                                    patient?.gp?.lastname
+                                )
+                            }}
                         </p>
                         <p class="me-4 text-nowrap mb-1">
-                            GP Email: exampleatexample.com
+                            GP Email: {{ patient?.gp?.email }}
                         </p>
                         <p class="me-4 text-nowrap mb-1">
-                            GP Contact Number: 02828 172819
+                            GP Contact Number: {{ patient?.gp?.contactNumber }}
                         </p>
                     </div>
                 </div>
@@ -54,8 +81,17 @@
                         <h5 class="fw-bold">Conditions Monitored</h5>
                     </div>
                     <div class="col-12 d-flex flex-wrap">
-                        <a class="me-4 text-nowrap mb-1">Heart Failure</a>
-                        <a class="me-4 text-nowrap mb-1">COPD</a>
+                        @for (condition of patient?.conditions; track $index) {
+                            @if (condition.shortName) {
+                                <a class="me-4 text-nowrap mb-1">{{
+                                    condition.shortName
+                                }}</a>
+                            } @else {
+                                <a class="me-4 text-nowrap mb-1">{{
+                                    condition.name
+                                }}</a>
+                            }
+                        }
                     </div>
                 </div>
             </div>

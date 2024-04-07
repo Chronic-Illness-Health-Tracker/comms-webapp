@@ -41,7 +41,8 @@
             <div
                 class="my-2 col-sm-12 col-md-6 col-lg-4 col-xxl-3"
                 [ngClass]="{
-                    'order-4 order-md-2': extended === true
+                    'order-4 order-md-2': extended === true,
+                    'order-2': extended === false
                 }">
                 <app-search (output)="searchOutput($event)"></app-search>
             </div>

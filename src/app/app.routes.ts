@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { PatientEditorComponent } from './pages/patient-editor/patient-editor.component';
 import { HealthConditionEditorComponent } from './pages/health-condition-editor/health-condition-editor.component';
+import { PatientViewerComponent } from './pages/patient-viewer/patient-viewer.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -12,6 +13,7 @@ export const routes: Routes = [
             { path: 'new', component: PatientEditorComponent },
             {
                 path: ':patientId',
+                component: PatientViewerComponent,
                 children: [
                     {
                         path: 'edit',
