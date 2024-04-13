@@ -5,6 +5,7 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <app-select-dropdown
+                        [items]="organisations"
                         [submitted]="submitted"
                         [editable]="editable"
                         messageSingle="Organisation"
@@ -12,6 +13,7 @@
                         [items]="organisations"
                         (searchOutput)="loadOrganisations($event)"
                         (selectedItem)="setOrganisation($event)"
+                        [selectItem]="inputOrganisation"
                         [searchable]="false"
                         [nameFn]="organisationName"></app-select-dropdown>
                 </div>

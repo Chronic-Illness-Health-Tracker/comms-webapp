@@ -198,71 +198,19 @@ export class HealthConditionControllerService {
     }
 
     /**
-     * Update a check ins information
-     * 
-     * @param body 
-     * @param conditionId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getCondition(body: ConditionCheckIn, conditionId: string, observe?: 'body', reportProgress?: boolean): Observable<ConditionCheckIn>;
-    public getCondition(body: ConditionCheckIn, conditionId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ConditionCheckIn>>;
-    public getCondition(body: ConditionCheckIn, conditionId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ConditionCheckIn>>;
-    public getCondition(body: ConditionCheckIn, conditionId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getCondition.');
-        }
-
-        if (conditionId === null || conditionId === undefined) {
-            throw new Error('Required parameter conditionId was null or undefined when calling getCondition.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<ConditionCheckIn>('put',`${this.basePath}/condition/${encodeURIComponent(String(conditionId))}/checkin`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Get a health condition by its id
      * 
      * @param conditionId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getCondition1(conditionId: string, observe?: 'body', reportProgress?: boolean): Observable<HealthCondition>;
-    public getCondition1(conditionId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<HealthCondition>>;
-    public getCondition1(conditionId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<HealthCondition>>;
-    public getCondition1(conditionId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getCondition(conditionId: string, observe?: 'body', reportProgress?: boolean): Observable<HealthCondition>;
+    public getCondition(conditionId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<HealthCondition>>;
+    public getCondition(conditionId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<HealthCondition>>;
+    public getCondition(conditionId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (conditionId === null || conditionId === undefined) {
-            throw new Error('Required parameter conditionId was null or undefined when calling getCondition1.');
+            throw new Error('Required parameter conditionId was null or undefined when calling getCondition.');
         }
 
         let headers = this.defaultHeaders;
@@ -327,6 +275,58 @@ export class HealthConditionControllerService {
         return this.httpClient.request<Array<HealthCondition>>('get',`${this.basePath}/condition`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update a check ins information
+     * 
+     * @param body 
+     * @param conditionId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateCheckIn(body: ConditionCheckIn, conditionId: string, observe?: 'body', reportProgress?: boolean): Observable<ConditionCheckIn>;
+    public updateCheckIn(body: ConditionCheckIn, conditionId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ConditionCheckIn>>;
+    public updateCheckIn(body: ConditionCheckIn, conditionId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ConditionCheckIn>>;
+    public updateCheckIn(body: ConditionCheckIn, conditionId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling updateCheckIn.');
+        }
+
+        if (conditionId === null || conditionId === undefined) {
+            throw new Error('Required parameter conditionId was null or undefined when calling updateCheckIn.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<ConditionCheckIn>('put',`${this.basePath}/condition/${encodeURIComponent(String(conditionId))}/checkin`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

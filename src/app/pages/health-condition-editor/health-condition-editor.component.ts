@@ -39,6 +39,10 @@ export class HealthConditionEditorComponent
     protected editMode: boolean = false;
     protected submitted: boolean = false;
 
+    protected conditionId?: string;
+
+    protected organisation?: Organisation;
+
     conditionForm: FormGroup = this.fb.nonNullable.group({
         name: this.fb.nonNullable.control<string>(''),
         shortName: this.fb.nonNullable.control<string>(''),
@@ -50,6 +54,7 @@ export class HealthConditionEditorComponent
         private healthConditionService: HealthConditionControllerService,
         private headerService: HeaderService
     ) {
+        console.log('uhh');
         this.setHeader();
     }
 
@@ -58,10 +63,19 @@ export class HealthConditionEditorComponent
     }
 
     ngOnInit(): void {
+        console.log('heinitre');
         this.route.data.pipe(takeUntil(this.onDestroy$)).subscribe(data => {
             if (data['editing'] === true) {
                 this.editMode = true;
                 this.conditionForm.enable();
+            }
+        });
+
+        this.route.params.pipe(takeUntil(this.onDestroy$)).subscribe(params => {
+            console.log('here');
+            if (params['conditionId']) {
+                this.conditionId = params['conditionId'];
+                this.loadCondition();
             }
         });
     }
@@ -77,6 +91,7 @@ export class HealthConditionEditorComponent
         this.readFormValues();
         if (this.isValid()) {
             if (this.editMode) {
+                this.updateHealthCondition();
             } else {
                 this.createHealthCondition();
             }
@@ -86,6 +101,14 @@ export class HealthConditionEditorComponent
     createHealthCondition() {
         lastValueFrom(
             this.healthConditionService.createCondition(this.condition)
+        )
+            .then(() => {})
+            .catch();
+    }
+
+    updateHealthCondition() {
+        lastValueFrom(
+            this.healthConditionService.updateCondition(this.condition)
         )
             .then(() => {})
             .catch();
@@ -110,5 +133,23 @@ export class HealthConditionEditorComponent
     readFormValues() {
         this.condition.name = this.conditionForm.value.name;
         this.condition.shortName = this.conditionForm.value.shortName;
+    }
+
+    loadCondition() {
+        lastValueFrom(
+            this.healthConditionService.getCondition(this.conditionId!)
+        ).then(result => {
+            this.condition = result;
+            this.organisation = result.organisation;
+
+            this.patchForm();
+        });
+    }
+
+    patchForm() {
+        this.conditionForm.controls['name'].setValue(this.condition.name);
+        this.conditionForm.controls['shortName'].setValue(
+            this.condition.shortName
+        );
     }
 }

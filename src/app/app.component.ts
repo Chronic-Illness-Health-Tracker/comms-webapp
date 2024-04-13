@@ -33,13 +33,18 @@ export class AppComponent implements OnInit {
         addConditionRoute: ['condition', 'new'],
     };
 
-    sidebarContent: Array<string> = [];
+    sidebarContent: Array<{ content: string; route: Array<string> }> = [];
 
     async ngOnInit(): Promise<void> {
         const conditions = await lastValueFrom(
             this.healthConditionService.listHealthConditions()
         );
 
-        this.sidebarContent = conditions.map(condition => condition.name!);
+        this.sidebarContent = conditions.map(condition => {
+            return {
+                content: condition.name!,
+                route: ['condition', condition.id!],
+            };
+        });
     }
 }

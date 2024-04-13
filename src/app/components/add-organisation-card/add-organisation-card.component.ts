@@ -2,9 +2,11 @@ import {
     Component,
     EventEmitter,
     Input,
+    OnChanges,
     OnDestroy,
     OnInit,
     Output,
+    SimpleChanges,
 } from '@angular/core';
 import { SelectDropdownComponent } from '../select-dropdown/select-dropdown.component';
 import { Organisation, OrganisationControllerService } from '../../../api';
@@ -25,7 +27,9 @@ import {
     templateUrl: './add-organisation-card.component.html',
     styleUrl: './add-organisation-card.component.scss',
 })
-export class AddOrganisationCardComponent implements OnInit, OnDestroy {
+export class AddOrganisationCardComponent
+    implements OnInit, OnDestroy, OnChanges
+{
     private onDestroy$ = new Subject<boolean>();
 
     protected editable: boolean = true;
@@ -59,6 +63,8 @@ export class AddOrganisationCardComponent implements OnInit, OnDestroy {
         }),
     });
 
+    @Input() inputOrganisation?: Organisation;
+
     @Input() submitted: boolean = false;
     @Output() itemChanged = new EventEmitter<Organisation>();
     @Output() valid = new EventEmitter<boolean>();
@@ -67,6 +73,7 @@ export class AddOrganisationCardComponent implements OnInit, OnDestroy {
         private organisationService: OrganisationControllerService,
         private fb: FormBuilder
     ) {}
+
     ngOnInit(): void {
         this.loadOrganisations('');
         this.form.disable();
@@ -82,6 +89,12 @@ export class AddOrganisationCardComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.onDestroy$.next(true);
         this.onDestroy$.complete();
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.inputOrganisation) {
+            this.setOrganisation(this.inputOrganisation);
+        }
     }
 
     protected organisationName(organisation?: Organisation): string {

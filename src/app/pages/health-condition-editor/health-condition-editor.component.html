@@ -27,6 +27,7 @@
 </div>
 
 <app-add-organisation-card
+    [inputOrganisation]="organisation"
     [submitted]="submitted"
     (valid)="isOrganisationValid($event)"
     (itemChanged)="updateOrganisation($event)"></app-add-organisation-card>
