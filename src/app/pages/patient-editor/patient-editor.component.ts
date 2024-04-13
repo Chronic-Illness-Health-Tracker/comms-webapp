@@ -6,7 +6,7 @@ import { PatientDetailsCardComponent } from '../../components/patient-details-ca
 import { GpDetailsCardComponent } from '../../components/gp-details-card/gp-details-card.component';
 import { FormsModule } from '@angular/forms';
 import { Patient } from '../../../api/model/patient';
-import { Gp, PatientControllerService } from '../../../api';
+import { Gp, HealthCondition, PatientControllerService } from '../../../api';
 import { Subject, lastValueFrom, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AddPatientCardComponent } from '../../components/add-patient-card/add-patient-card.component';
@@ -42,6 +42,8 @@ export class PatientEditorComponent
     protected gp?: Gp;
 
     protected submitted: boolean = false;
+
+    private newConditionToAdd?: HealthCondition;
 
     constructor(
         private headerService: HeaderService,
@@ -90,6 +92,10 @@ export class PatientEditorComponent
         this.onGpChange(patient?.gp);
     }
 
+    selectedHealthCondition(condition?: HealthCondition) {
+        this.newConditionToAdd = condition;
+    }
+
     onGpChange(gp?: Gp | null) {
         if (gp) {
             this.gp = gp;
@@ -114,14 +120,29 @@ export class PatientEditorComponent
     }
 
     savePatient() {
+        console.log(this._patientValid);
+        console.log(this._gpValid);
         this.submitted = true;
         if (this._patientValid && this._gpValid) {
             if (this.patient) {
                 this.patient.gp = this.gp;
 
-                lastValueFrom(this.patientService.createPatient(this.patient))
-                    .then()
-                    .catch();
+                if (this.creatingNewPatient) {
+                    lastValueFrom(
+                        this.patientService.createPatient(this.patient)
+                    )
+                        .then()
+                        .catch();
+                } else {
+                    if (this.newConditionToAdd) {
+                        this.patient.conditions?.push(this.newConditionToAdd);
+                    }
+                    lastValueFrom(
+                        this.patientService.updatePatient(this.patient)
+                    )
+                        .then()
+                        .catch();
+                }
             }
         }
     }

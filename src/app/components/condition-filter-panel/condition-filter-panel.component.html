@@ -63,8 +63,8 @@
         @if (_selectedItems.length <= 3) {
             @for (item of _selectedItems; track $index) {
                 <helphi-chip (closed)="itemToggled(item)">
-                    @if (item.shortname) {
-                        {{ item.shortname }}
+                    @if (item.shortName) {
+                        {{ item.shortName }}
                     } @else {
                         {{ item.name }}
                     }

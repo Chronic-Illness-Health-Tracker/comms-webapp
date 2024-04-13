@@ -1,7 +1,9 @@
 <div class="row mt-2 mb-2">
     <div class="col-12">
-        <app-condition-filter-panel
-            [items]="stubFilterItems"></app-condition-filter-panel>
+        @if (conditions) {
+            <app-condition-filter-panel
+                [items]="conditions"></app-condition-filter-panel>
+        }
     </div>
 </div>
 @if (extended === false) {
@@ -16,6 +18,6 @@
     <div class="col-12 mt-2">
         <app-dashboard-preview
             [extended]="extended"
-            [data]="stubTableData"></app-dashboard-preview>
+            [data]="tableData"></app-dashboard-preview>
     </div>
 </div>

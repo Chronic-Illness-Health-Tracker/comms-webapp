@@ -1,11 +1,25 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageComponent } from '../../base/page.component';
 import { HeaderService } from '../../svc/header.service';
 import { ChartsComponent } from '../../components/charts/charts.component';
 import { ConditionFilterPanelComponent } from '../../components/condition-filter-panel/condition-filter-panel.component';
 import { DashboardPreviewComponent } from '../../components/dashboard/dashboard-preview/dashboard-preview.component';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import {
+    forkJoin,
+    lastValueFrom,
+    Observable,
+    ObservableInput,
+    Subject,
+    takeUntil,
+} from 'rxjs';
+import {
+    HealthCondition,
+    HealthConditionControllerService,
+    Patient,
+    PatientControllerService,
+    PatientStatus,
+} from '../../../api';
 
 @Component({
     selector: 'app-dashboard',
@@ -15,56 +29,27 @@ import { Subject, takeUntil } from 'rxjs';
         ConditionFilterPanelComponent,
         DashboardPreviewComponent,
     ],
+    providers: [HealthConditionControllerService, PatientControllerService],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent implements PageComponent, OnDestroy {
+export class DashboardComponent implements PageComponent, OnDestroy, OnInit {
     protected extended: boolean = false;
+    protected conditions?: Array<HealthCondition>;
 
     private onDestroy$ = new Subject<boolean>();
 
-    stubFilterItems = [
-        { name: 'Hypertrophic Cardiomyopathy', shortname: 'HCM' },
-        { name: 'Heart Failure', shortname: null },
-        { name: 'Arrhythmia', shortname: null },
-        { name: 'Short QT Syndrome', shortname: 'SQTS' },
-        {
-            name: 'Catecholaminergic Polymorphic Ventricular Tachycardia',
-            shortname: 'CPVT',
-        },
-        { name: 'Brugada syndrome', shortname: null },
-        { name: 'Acyanotic heart disease', shortname: null },
-    ];
-
-    stubTableData = [
-        {
-            name: 'Jason response',
-            nhsNumber: '831 602 8926',
-            conditionName: 'CPVT',
-            conditionStatus: 'Unwell',
-        },
-        {
-            name: 'Miles Tone',
-            nhsNumber: '802 298 5013',
-            conditionName: 'SQTS',
-            conditionStatus: 'Unwell',
-        },
-        {
-            name: 'Jake weary Tone',
-            nhsNumber: '616 781 9056',
-            conditionName: 'Heart Failure',
-            conditionStatus: 'Sub-clinical',
-        },
-        {
-            name: 'Jake weary Tone',
-            nhsNumber: '616 781 9056',
-            conditionName: 'Heart Failure',
-            conditionStatus: 'Normal',
-        },
-    ];
+    tableData: Array<{
+        name: string;
+        nhsNumber: string;
+        conditionName: string;
+        conditionStatus: string;
+    }> = [];
     constructor(
         private headerService: HeaderService,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private healthConditionService: HealthConditionControllerService,
+        private patientService: PatientControllerService
     ) {
         this.setHeader();
 
@@ -74,6 +59,13 @@ export class DashboardComponent implements PageComponent, OnDestroy {
                 this.extended = params['extended'] === 'true' ? true : false;
             });
     }
+    async ngOnInit(): Promise<void> {
+        lastValueFrom(this.loadConditions()).then(result => {
+            this.conditions = result;
+        });
+
+        await this.loadPatients();
+    }
 
     ngOnDestroy() {
         this.onDestroy$.next(true);
@@ -82,5 +74,41 @@ export class DashboardComponent implements PageComponent, OnDestroy {
 
     setHeader(): void {
         this.headerService.header = 'dashboard';
+    }
+
+    loadConditions() {
+        return this.healthConditionService.listHealthConditions();
+    }
+
+    async loadPatients() {
+        console.log('LOADING?');
+        const patients = await lastValueFrom(this.patientService.getPatients());
+        console.log('LODED?');
+
+        patients.forEach(patient => {
+            console.log(patient);
+            patient.conditions?.forEach(condition => {
+                lastValueFrom(
+                    this.patientService.getRecentStatus(
+                        patient.id!,
+                        condition.id!
+                    )
+                ).then(patientStatus => {
+                    const patientName = `${patient.forename!} ${patient.lastname!}`;
+                    const patientNhsNumber = patient.nhsNumber!;
+                    const conditionName = condition.shortName!;
+                    const status = patientStatus.status!.toString();
+
+                    const createdPatient = {
+                        name: patientName,
+                        nhsNumber: patientNhsNumber,
+                        conditionName: conditionName,
+                        conditionStatus: status,
+                    };
+
+                    this.tableData.push(createdPatient);
+                });
+            });
+        });
     }
 }

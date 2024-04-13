@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { HelphiChipComponent } from '@helphi/helphi-common-ui';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { HealthCondition } from '../../../api';
 
 @Component({
     selector: 'app-condition-filter-panel',
@@ -21,25 +22,18 @@ import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 export class ConditionFilterPanelComponent implements OnInit, OnDestroy {
     private onDestroy$ = new Subject<boolean>();
 
-    @Input({ required: true }) items!: Array<{
-        name: string;
-        shortname?: string | null;
-    }>;
+    @Input({ required: true }) items!: Array<HealthCondition>;
     @Output() selectedItems = new EventEmitter<Array<string>>();
 
-    protected _selectedItems: Array<{
-        name: string;
-        shortname?: string | null;
-    }> = [];
+    protected _selectedItems: Array<HealthCondition> = [];
 
-    protected selectedItemsNames: Array<string> = [];
+    protected selectedItemsNames: Array<string | undefined> = [];
 
     protected search: string = '';
-    protected searchChangedSubject: Subject<string> = new Subject<string>();
-    protected filteredItems: Array<{
-        name: string;
-        shortname?: string | null;
-    }> = [];
+    protected searchChangedSubject: Subject<string | undefined> = new Subject<
+        string | undefined
+    >();
+    protected filteredItems: Array<HealthCondition> = [];
 
     ngOnInit(): void {
         this._selectedItems = [...this.items];
@@ -54,12 +48,12 @@ export class ConditionFilterPanelComponent implements OnInit, OnDestroy {
                 takeUntil(this.onDestroy$)
             )
             .subscribe(value => {
-                this.search = value;
+                this.search = value!;
 
                 this.filteredItems = this.items.filter(item => {
-                    if (item.shortname) {
+                    if (item.shortName) {
                         if (
-                            item.shortname
+                            item.shortName
                                 .toLowerCase()
                                 .includes(this.search.toLowerCase())
                         ) {
@@ -67,8 +61,8 @@ export class ConditionFilterPanelComponent implements OnInit, OnDestroy {
                         }
                     }
 
-                    return item.name
-                        .toLowerCase()
+                    return item
+                        .name!.toLowerCase()
                         .includes(this.search.toLowerCase());
                 });
             });
@@ -79,7 +73,7 @@ export class ConditionFilterPanelComponent implements OnInit, OnDestroy {
         this.onDestroy$.complete();
     }
 
-    itemToggled(itemToggled: { name: string; shortname?: string | null }) {
+    itemToggled(itemToggled: HealthCondition) {
         const index = this._selectedItems.indexOf(itemToggled);
 
         if (index === -1) {

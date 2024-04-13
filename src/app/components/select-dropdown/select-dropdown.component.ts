@@ -3,9 +3,11 @@ import {
     Component,
     EventEmitter,
     Input,
+    OnChanges,
     OnDestroy,
     OnInit,
     Output,
+    SimpleChanges,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
@@ -18,7 +20,7 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
     templateUrl: './select-dropdown.component.html',
     styleUrl: './select-dropdown.component.scss',
 })
-export class SelectDropdownComponent implements OnInit, OnDestroy {
+export class SelectDropdownComponent implements OnInit, OnChanges, OnDestroy {
     private onDestroy$ = new Subject<boolean>();
 
     @Input() submitted: boolean = false;
@@ -28,6 +30,7 @@ export class SelectDropdownComponent implements OnInit, OnDestroy {
     @Input() items: Array<unknown> = [];
     @Input({ required: true }) nameFn!: Function;
     @Input() searchable?: boolean = true;
+    @Input() selectItem?: unknown;
 
     @Output() selectedItem = new EventEmitter<unknown>();
     @Output() searchOutput = new EventEmitter<string>();
@@ -59,11 +62,17 @@ export class SelectDropdownComponent implements OnInit, OnDestroy {
         this.onDestroy$.complete;
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.selectItem && !this._selectedItem) {
+            this._selectedItem = this.selectItem;
+        }
+    }
+
     onItemSearch(name: string) {
         this.itemSearchChangedSubject.next(name);
     }
 
-    setItem(item: any | null) {
+    setItem(item?: any | null) {
         this._selectedItem = item;
         this.selectedItem.emit(item);
     }

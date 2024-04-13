@@ -87,6 +87,7 @@ export class PatientDetailsCardComponent
     @Output() valid = new EventEmitter<boolean>();
 
     protected form = this.fb.group({
+        id: this.fb.nonNullable.control(''),
         nhsNumber: this.fb.nonNullable.control('', Validators.required),
         dateOfBirth: this.fb.nonNullable.control<NgbDateStruct | undefined>(
             undefined,
@@ -137,12 +138,29 @@ export class PatientDetailsCardComponent
                     patient.gp = this.patient?.gp;
                     patient.conditions = this.patient?.conditions;
                 }
-                if (this.form.valid) {
+
+                if (this.form.valid || this.editable == false) {
                     this.changes.emit(patient);
                 }
 
-                this.valid.emit(this.form.valid);
+                this.editable
+                    ? this.valid.emit(this.form.valid)
+                    : this.valid.emit(true);
             });
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.patchForm();
+        if (this.editable) {
+            this.form.enable();
+        } else {
+            this.form.disable();
+        }
+    }
+
+    ngOnDestroy(): void {
+        this.onDestroy$.next(true);
+        this.onDestroy$.complete;
     }
 
     patchForm() {
@@ -164,19 +182,5 @@ export class PatientDetailsCardComponent
 
             this.valid.emit(this.form.valid);
         }
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        this.patchForm();
-        if (this.editable) {
-            this.form.enable();
-        } else {
-            this.form.disable();
-        }
-    }
-
-    ngOnDestroy(): void {
-        this.onDestroy$.next(true);
-        this.onDestroy$.complete;
     }
 }

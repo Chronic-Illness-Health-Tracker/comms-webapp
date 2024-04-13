@@ -19,8 +19,10 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 })
 export class AddPatientCardComponent implements OnInit {
     protected patients: Array<Patient> = [];
+    protected conditions: Array<HealthCondition> = [];
     protected creatingNewPatient: boolean = false;
     protected _selectedPatient?: Patient;
+    protected _selectedCondition?: HealthCondition;
 
     protected patientSearch = '';
 
@@ -35,6 +37,7 @@ export class AddPatientCardComponent implements OnInit {
 
     ngOnInit(): void {
         this.getPatients();
+        this.getConditions();
     }
 
     getPatients(value?: string) {
@@ -43,7 +46,13 @@ export class AddPatientCardComponent implements OnInit {
         });
     }
 
-    getConditions() {}
+    getConditions() {
+        lastValueFrom(this.conditionService.listHealthConditions()).then(
+            result => {
+                this.conditions = result;
+            }
+        );
+    }
 
     patientSelected(patient: Patient) {
         this._selectedPatient = patient;
@@ -51,6 +60,7 @@ export class AddPatientCardComponent implements OnInit {
     }
 
     conditionSelected(condition: HealthCondition) {
+        this._selectedCondition = condition;
         this.selectedHealthCondition.emit(condition);
     }
 

@@ -58,8 +58,8 @@ export class GpDetailsCardComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    protected gpSurgeryName(gpSurgery?: GpSurgery): string {
-        return gpSurgery?.name ? gpSurgery.name : '';
+    protected gpSurgeryName(gpSurgery?: GpSurgery): string | undefined {
+        return gpSurgery?.name;
     }
 
     protected get surgeryAddress(): string {
@@ -114,6 +114,7 @@ export class GpDetailsCardComponent implements OnInit, OnDestroy, OnChanges {
             if (this.gp) {
                 this.selectedGp = this.gp;
                 this.selectedGpSurgery = this.gp.surgery;
+                this.valid.emit(true);
             }
         }
     }

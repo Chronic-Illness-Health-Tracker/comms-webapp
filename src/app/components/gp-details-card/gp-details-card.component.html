@@ -9,6 +9,7 @@
                     messageSingle="GP Surgery"
                     messagePlural="GP Surgeries"
                     [items]="gpSurgeries"
+                    [selectItem]="selectedGpSurgery"
                     (searchOutput)="searchForGpSurgery($event)"
                     (selectedItem)="setGpSurgery($event)"
                     [nameFn]="gpSurgeryName"></app-select-dropdown>
@@ -20,6 +21,7 @@
                     messageSingle="GP"
                     messagePlural="GPs"
                     [items]="gps"
+                    [selectItem]="selectedGp"
                     (searchOutput)="searchForGpSurgery($event)"
                     (selectedItem)="setGp($event)"
                     [searchable]="false"

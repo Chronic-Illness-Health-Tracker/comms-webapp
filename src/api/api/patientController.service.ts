@@ -475,9 +475,9 @@ export class PatientControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRecentStatus(patientId: string, conditionId: string, observe?: 'body', reportProgress?: boolean): Observable<UserResponse>;
-    public getRecentStatus(patientId: string, conditionId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserResponse>>;
-    public getRecentStatus(patientId: string, conditionId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserResponse>>;
+    public getRecentStatus(patientId: string, conditionId: string, observe?: 'body', reportProgress?: boolean): Observable<PatientStatus>;
+    public getRecentStatus(patientId: string, conditionId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PatientStatus>>;
+    public getRecentStatus(patientId: string, conditionId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PatientStatus>>;
     public getRecentStatus(patientId: string, conditionId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (patientId === null || patientId === undefined) {
@@ -504,7 +504,7 @@ export class PatientControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<UserResponse>('get',`${this.basePath}/patient/${encodeURIComponent(String(patientId))}/status/${encodeURIComponent(String(conditionId))}/recent`,
+        return this.httpClient.request<PatientStatus>('get',`${this.basePath}/patient/${encodeURIComponent(String(patientId))}/status/${encodeURIComponent(String(conditionId))}/recent`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
