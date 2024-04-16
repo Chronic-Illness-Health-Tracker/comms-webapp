@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AddOrganisationCardComponent } from '../../components/add-organisation-card/add-organisation-card.component';
 import {
+    ConditionCheckIn,
     HealthCondition,
     HealthConditionControllerService,
     Organisation,
+    Question,
 } from '../../../api';
 import {
     FormBuilder,
@@ -16,6 +18,7 @@ import { lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { PageComponent } from '../../base/page.component';
 import { HeaderService } from '../../svc/header.service';
+import { CheckInEditorComponent } from '../../components/check-in-editor/check-in-editor.component';
 
 @Component({
     selector: 'app-health-condition-editor',
@@ -25,6 +28,7 @@ import { HeaderService } from '../../svc/header.service';
         FormsModule,
         ReactiveFormsModule,
         SaveBarComponent,
+        CheckInEditorComponent,
     ],
     providers: [HealthConditionControllerService],
     templateUrl: './health-condition-editor.component.html',
@@ -38,12 +42,16 @@ export class HealthConditionEditorComponent
     protected condition: HealthCondition = {};
     protected editMode: boolean = false;
     protected submitted: boolean = false;
+    protected conditionCheckIn?: ConditionCheckIn;
 
     protected conditionId?: string;
 
     protected organisation?: Organisation;
 
+    protected questions: Array<Question> = [];
+
     conditionForm: FormGroup = this.fb.nonNullable.group({
+        id: this.fb.nonNullable.control<string>(''),
         name: this.fb.nonNullable.control<string>(''),
         shortName: this.fb.nonNullable.control<string>(''),
     });
@@ -54,7 +62,6 @@ export class HealthConditionEditorComponent
         private healthConditionService: HealthConditionControllerService,
         private headerService: HeaderService
     ) {
-        console.log('uhh');
         this.setHeader();
     }
 
@@ -63,7 +70,6 @@ export class HealthConditionEditorComponent
     }
 
     ngOnInit(): void {
-        console.log('heinitre');
         this.route.data.pipe(takeUntil(this.onDestroy$)).subscribe(data => {
             if (data['editing'] === true) {
                 this.editMode = true;
@@ -72,10 +78,10 @@ export class HealthConditionEditorComponent
         });
 
         this.route.params.pipe(takeUntil(this.onDestroy$)).subscribe(params => {
-            console.log('here');
             if (params['conditionId']) {
                 this.conditionId = params['conditionId'];
                 this.loadCondition();
+                this.loadCheckIn();
             }
         });
     }
@@ -96,14 +102,20 @@ export class HealthConditionEditorComponent
                 this.createHealthCondition();
             }
         }
+        if (this.editMode) {
+            this.saveQuestions();
+        }
     }
 
     createHealthCondition() {
+        console.log(this.condition);
         lastValueFrom(
             this.healthConditionService.createCondition(this.condition)
         )
             .then(() => {})
             .catch();
+
+        //lastValueFrom(this.healthConditionService.);
     }
 
     updateHealthCondition() {
@@ -131,6 +143,8 @@ export class HealthConditionEditorComponent
     }
 
     readFormValues() {
+        this.condition.id =
+            this.condition.id === undefined ? '' : this.condition.id;
         this.condition.name = this.conditionForm.value.name;
         this.condition.shortName = this.conditionForm.value.shortName;
     }
@@ -146,10 +160,35 @@ export class HealthConditionEditorComponent
         });
     }
 
+    loadCheckIn() {
+        lastValueFrom(this.healthConditionService.getCheckIn(this.conditionId!))
+            .then(result => {
+                this.conditionCheckIn = result;
+            })
+            .catch(() => {});
+    }
+
     patchForm() {
         this.conditionForm.controls['name'].setValue(this.condition.name);
         this.conditionForm.controls['shortName'].setValue(
             this.condition.shortName
         );
+    }
+
+    onQuestionChanged(questions: Array<Question>) {
+        this.questions = questions;
+    }
+
+    onCheckInChanged(checkIn: ConditionCheckIn) {
+        this.conditionCheckIn = checkIn;
+    }
+
+    saveQuestions() {
+        lastValueFrom(
+            this.healthConditionService.updateQuestions(
+                this.questions,
+                this.conditionId as string
+            )
+        ).then();
     }
 }

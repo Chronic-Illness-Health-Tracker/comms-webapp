@@ -37,6 +37,7 @@ export class AddOrganisationCardComponent
     protected selectedOrganisation?: Organisation;
 
     protected form: FormGroup = this.fb.nonNullable.group({
+        id: this.fb.nonNullable.control(''),
         name: this.fb.nonNullable.control<string>('', Validators.required),
         countryCode: this.fb.nonNullable.control<string>(
             '',
@@ -48,6 +49,7 @@ export class AddOrganisationCardComponent
             Validators.required
         ),
         contactAddress: this.fb.nonNullable.group({
+            id: this.fb.nonNullable.control(''),
             addresslineOne: this.fb.nonNullable.control<string>(
                 '',
                 Validators.required

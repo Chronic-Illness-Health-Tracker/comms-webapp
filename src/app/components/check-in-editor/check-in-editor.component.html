@@ -1,0 +1,60 @@
+<div class="card">
+    <div class="card-header">Check in</div>
+    <div class="card-body">
+        <div class="row mb-4">
+            <form [formGroup]="form">
+                <div class="col-4">
+                    <label class="form-label">Sub-Clinical score *</label>
+                    <input
+                        formControlName="subclinicalScore"
+                        type="number"
+                        class="form-control" />
+                </div>
+                <div class="col-4">
+                    <label class="form-label">Unwell score *</label>
+                    <input
+                        formControlName="unwellScore"
+                        type="number"
+                        class="form-control" />
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div ngbAccordion [closeOthers]="true">
+                    @for (question of questions; track $index) {
+                        <div ngbAccordionItem>
+                            <h2 ngbAccordionHeader>
+                                <button ngbAccordionButton>
+                                    @if (question.questionText) {
+                                        {{ question.questionText }}
+                                    } @else {
+                                        New Question
+                                    }
+                                </button>
+                            </h2>
+                            <div ngbAccordionCollapse>
+                                <div ngbAccordionBody>
+                                    <app-question-editor
+                                        (questionChanged)="
+                                            onQuestionChanged($event, $index)
+                                        "
+                                        [question]="
+                                            question
+                                        "></app-question-editor>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-1">
+                <button (click)="addNewQuestion()" class="btn btn-primary">
+                    Add question
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

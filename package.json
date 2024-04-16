@@ -25,7 +25,7 @@
         "@angular/router": "^17.1.0",
         "@angular/ssr": "^17.1.2",
         "@auth0/auth0-angular": "^2.2.3",
-        "@helphi/helphi-common-ui": "0.0.1-snapshot.48",
+        "@helphi/helphi-common-ui": "0.0.1-snapshot.49",
         "@ng-bootstrap/ng-bootstrap": "^16.0.0",
         "@popperjs/core": "^2.11.8",
         "bootstrap": "^5.3.2",

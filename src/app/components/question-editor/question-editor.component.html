@@ -1,0 +1,92 @@
+<form [formGroup]="form">
+    <div class="row">
+        <div class="col-6">
+            <label class="form-label">Question *</label>
+            <input
+                formControlName="questionText"
+                type="text"
+                class="form-control" />
+        </div>
+        <div class="col-3">
+            <label class="form-label">Question Type *</label>
+            <select
+                formControlName="questionType"
+                class="form-select"
+                aria-label="Default select example">
+                <option value="open">Open Question</option>
+                <option value="closed">Single Selection</option>
+                <option value="multiple">Multiple Selection</option>
+                <option value="range">Range</option>
+            </select>
+        </div>
+    </div>
+    @if (
+        form.get('questionType')!.value !== 'open' &&
+        form.get('questionType')!.value !== 'range'
+    ) {
+        <hr />
+        <h3>Answers</h3>
+        <ng-container formArrayName="possibleAnswers">
+            @for (item of answers.controls; track $index) {
+                <div [formGroupName]="$index" class="row mt-2">
+                    <div class="row">
+                        <div class="col-3">
+                            <label class="form-label">Answer *</label>
+                            <input
+                                formControlName="answerText"
+                                type="text"
+                                class="form-control" />
+                        </div>
+                        <div class="col-1">
+                            <label class="form-label">Answer Score *</label>
+                            <input
+                                formControlName="answerScore"
+                                type="number"
+                                class="form-control" />
+                        </div>
+                        <div class="col-1 align-items-end d-flex">
+                            <button
+                                (click)="removeAnswer($index)"
+                                class="btn btn-primary">
+                                <i class="fa-regular fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </ng-container>
+
+        <div class="row mt-2">
+            <div class="col-1">
+                <div class="col-1 align-items-end d-flex">
+                    <button
+                        (click)="addNewAnswer()"
+                        class="btn btn-primary d-flex align-items-center">
+                        Add <i class="fa-regular fa-plus ms-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (form.get('questionType')!.value === 'range') {
+        <ng-container formArrayName="answerScoreRange">
+            <div class="row mt-2">
+                <div class="col-2">
+                    <label class="form-label">Min value *</label>
+                    <input
+                        formControlName="0"
+                        type="number"
+                        class="form-control" />
+                </div>
+                <div class="col-2">
+                    <label class="form-label">Max value *</label>
+                    <input
+                        formControlName="1"
+                        type="number"
+                        class="form-control" />
+                </div>
+            </div>
+        </ng-container>
+    }
+</form>

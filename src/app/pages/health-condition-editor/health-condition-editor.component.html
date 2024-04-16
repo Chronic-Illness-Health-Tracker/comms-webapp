@@ -26,10 +26,22 @@
     </div>
 </div>
 
-<app-add-organisation-card
-    [inputOrganisation]="organisation"
-    [submitted]="submitted"
-    (valid)="isOrganisationValid($event)"
-    (itemChanged)="updateOrganisation($event)"></app-add-organisation-card>
+<div class="row">
+    <app-add-organisation-card
+        [inputOrganisation]="organisation"
+        [submitted]="submitted"
+        (valid)="isOrganisationValid($event)"
+        (itemChanged)="updateOrganisation($event)"></app-add-organisation-card>
+</div>
+
+@if (editMode) {
+    <div class="row mt-2">
+        <app-check-in-editor
+            (checkInChanged)="onCheckInChanged($event)"
+            (questionsChanged)="
+                onQuestionChanged($event)
+            "></app-check-in-editor>
+    </div>
+}
 
 <app-save-bar (saved)="save()"></app-save-bar>

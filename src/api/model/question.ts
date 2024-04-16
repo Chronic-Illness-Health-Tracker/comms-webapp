@@ -9,14 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Answer } from './answer';
 
 export interface Question { 
     questionId?: number;
     conditionId?: string;
+    questionText?: string;
     questionType?: Question.QuestionTypeEnum;
-    possibleAnswers?: Array<string>;
+    possibleAnswers?: Array<Answer>;
     answerScoreRange?: Array<number>;
-    answerScore?: Array<number>;
 }
 export namespace Question {
     export type QuestionTypeEnum = 'open' | 'closed' | 'multiple' | 'range';
