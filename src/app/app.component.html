@@ -1,9 +1,11 @@
-<helphi-container
-    helpRoute=""
-    settingRoute=""
-    profileRoute=""
-    [sidebarContent]="sidebarContent"
-    [title]="headerService.header"
-    [sidebarConfig]="sidebarConfig">
-    <router-outlet></router-outlet>
-</helphi-container>
+@if (authenticated) {
+    <helphi-container
+        helpRoute=""
+        settingRoute=""
+        profileRoute=""
+        [sidebarContent]="sidebarContent"
+        [title]="headerService.header"
+        [sidebarConfig]="sidebarConfig">
+        <router-outlet></router-outlet>
+    </helphi-container>
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {
+    HelphiAuthService,
     HelphiContainerComponent,
     SidebarConfig,
 } from '@helphi/helphi-common-ui';
@@ -18,9 +19,12 @@ import { lastValueFrom } from 'rxjs';
     styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
+    protected authenticated: boolean = false;
+
     constructor(
         protected headerService: HeaderService,
-        private healthConditionService: HealthConditionControllerService
+        private healthConditionService: HealthConditionControllerService,
+        private authService: HelphiAuthService
     ) {}
 
     title = 'comms-webapp';
@@ -36,6 +40,9 @@ export class AppComponent implements OnInit {
     sidebarContent: Array<{ content: string; route: Array<string> }> = [];
 
     async ngOnInit(): Promise<void> {
+        await this.authService.authenticate();
+        this.authenticated = true;
+
         const conditions = await lastValueFrom(
             this.healthConditionService.listHealthConditions()
         );
