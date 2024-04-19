@@ -17,7 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { User } from '../model/user';
+import { BaseUser } from '../model/baseUser';
+import { UserType } from '../model/userType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -56,15 +57,15 @@ export class UserControllerService {
 
 
     /**
-     * 
+     * Get a user
      * 
      * @param userId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUser(userId: string, observe?: 'body', reportProgress?: boolean): Observable<User>;
-    public getUser(userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
-    public getUser(userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public getUser(userId: string, observe?: 'body', reportProgress?: boolean): Observable<BaseUser>;
+    public getUser(userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BaseUser>>;
+    public getUser(userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BaseUser>>;
     public getUser(userId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userId === null || userId === undefined) {
@@ -75,7 +76,8 @@ export class UserControllerService {
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
-            '*/*'
+            '*/*',
+            'application/json'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected != undefined) {
@@ -86,7 +88,7 @@ export class UserControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<User>('get',`${this.basePath}/user/${encodeURIComponent(String(userId))}`,
+        return this.httpClient.request<BaseUser>('get',`${this.basePath}/user/${encodeURIComponent(String(userId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -103,9 +105,9 @@ export class UserControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserType(userId: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getUserType(userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getUserType(userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public getUserType(userId: string, observe?: 'body', reportProgress?: boolean): Observable<UserType>;
+    public getUserType(userId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserType>>;
+    public getUserType(userId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserType>>;
     public getUserType(userId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userId === null || userId === undefined) {
@@ -116,6 +118,7 @@ export class UserControllerService {
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
+            '*/*',
             'application/json'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
@@ -127,7 +130,7 @@ export class UserControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<string>('get',`${this.basePath}/user/${encodeURIComponent(String(userId))}/type`,
+        return this.httpClient.request<UserType>('get',`${this.basePath}/user/${encodeURIComponent(String(userId))}/type`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

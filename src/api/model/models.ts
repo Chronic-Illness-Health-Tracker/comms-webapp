@@ -1,5 +1,7 @@
 export * from './address';
 export * from './answer';
+export * from './baseUser';
+export * from './clinician';
 export * from './conditionCheckIn';
 export * from './gp';
 export * from './gpSurgery';
@@ -8,5 +10,6 @@ export * from './organisation';
 export * from './patient';
 export * from './patientStatus';
 export * from './question';
-export * from './user';
+export * from './registration';
 export * from './userResponse';
+export * from './userType';

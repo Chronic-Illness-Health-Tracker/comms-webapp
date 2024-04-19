@@ -17,14 +17,14 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { GpSurgery } from '../model/gpSurgery';
+import { Clinician } from '../model/clinician';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
-export class GpSurgeryControllerService {
+export class ClinicianControllerService {
 
     protected basePath = 'http://localhost:8080';
     public defaultHeaders = new HttpHeaders();
@@ -56,19 +56,19 @@ export class GpSurgeryControllerService {
 
 
     /**
-     * Create a new GP Surgery
+     * Create a new Clinician
      * 
      * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createGpSurgery(body: GpSurgery, observe?: 'body', reportProgress?: boolean): Observable<GpSurgery>;
-    public createGpSurgery(body: GpSurgery, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GpSurgery>>;
-    public createGpSurgery(body: GpSurgery, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GpSurgery>>;
-    public createGpSurgery(body: GpSurgery, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createClinician(body: Clinician, observe?: 'body', reportProgress?: boolean): Observable<Clinician>;
+    public createClinician(body: Clinician, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Clinician>>;
+    public createClinician(body: Clinician, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Clinician>>;
+    public createClinician(body: Clinician, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createGpSurgery.');
+            throw new Error('Required parameter body was null or undefined when calling createClinician.');
         }
 
         let headers = this.defaultHeaders;
@@ -92,7 +92,7 @@ export class GpSurgeryControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GpSurgery>('post',`${this.basePath}/gp-surgery`,
+        return this.httpClient.request<Clinician>('post',`${this.basePath}/clinician`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -104,19 +104,19 @@ export class GpSurgeryControllerService {
     }
 
     /**
-     * Delete an existing GP Surgery
+     * delete Clinician
      * 
-     * @param gpSurgeryId 
+     * @param clinicianId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteGpSurgery(gpSurgeryId: string, observe?: 'body', reportProgress?: boolean): Observable<GpSurgery>;
-    public deleteGpSurgery(gpSurgeryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GpSurgery>>;
-    public deleteGpSurgery(gpSurgeryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GpSurgery>>;
-    public deleteGpSurgery(gpSurgeryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteClinician(clinicianId: string, observe?: 'body', reportProgress?: boolean): Observable<Clinician>;
+    public deleteClinician(clinicianId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Clinician>>;
+    public deleteClinician(clinicianId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Clinician>>;
+    public deleteClinician(clinicianId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (gpSurgeryId === null || gpSurgeryId === undefined) {
-            throw new Error('Required parameter gpSurgeryId was null or undefined when calling deleteGpSurgery.');
+        if (clinicianId === null || clinicianId === undefined) {
+            throw new Error('Required parameter clinicianId was null or undefined when calling deleteClinician.');
         }
 
         let headers = this.defaultHeaders;
@@ -135,7 +135,7 @@ export class GpSurgeryControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GpSurgery>('delete',`${this.basePath}/gp-surgery/${encodeURIComponent(String(gpSurgeryId))}`,
+        return this.httpClient.request<Clinician>('delete',`${this.basePath}/clinician/${encodeURIComponent(String(clinicianId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -146,19 +146,19 @@ export class GpSurgeryControllerService {
     }
 
     /**
-     * Get a GP Surgery by its ID
+     * Get Clinician
      * 
-     * @param gpSurgeryId 
+     * @param clinicianId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGpSurgery(gpSurgeryId: string, observe?: 'body', reportProgress?: boolean): Observable<GpSurgery>;
-    public getGpSurgery(gpSurgeryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GpSurgery>>;
-    public getGpSurgery(gpSurgeryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GpSurgery>>;
-    public getGpSurgery(gpSurgeryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getClinician(clinicianId: string, observe?: 'body', reportProgress?: boolean): Observable<Clinician>;
+    public getClinician(clinicianId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Clinician>>;
+    public getClinician(clinicianId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Clinician>>;
+    public getClinician(clinicianId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (gpSurgeryId === null || gpSurgeryId === undefined) {
-            throw new Error('Required parameter gpSurgeryId was null or undefined when calling getGpSurgery.');
+        if (clinicianId === null || clinicianId === undefined) {
+            throw new Error('Required parameter clinicianId was null or undefined when calling getClinician.');
         }
 
         let headers = this.defaultHeaders;
@@ -177,7 +177,7 @@ export class GpSurgeryControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GpSurgery>('get',`${this.basePath}/gp-surgery/${encodeURIComponent(String(gpSurgeryId))}`,
+        return this.httpClient.request<Clinician>('get',`${this.basePath}/clinician/${encodeURIComponent(String(clinicianId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -188,67 +188,19 @@ export class GpSurgeryControllerService {
     }
 
     /**
-     * List of GP Surgeries
-     * 
-     * @param surgeryName 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public listGpSurgeries(surgeryName: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GpSurgery>>;
-    public listGpSurgeries(surgeryName: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GpSurgery>>>;
-    public listGpSurgeries(surgeryName: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GpSurgery>>>;
-    public listGpSurgeries(surgeryName: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (surgeryName === null || surgeryName === undefined) {
-            throw new Error('Required parameter surgeryName was null or undefined when calling listGpSurgeries.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (surgeryName !== undefined && surgeryName !== null) {
-            queryParameters = queryParameters.set('surgeryName', <any>surgeryName);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*',
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<GpSurgery>>('get',`${this.basePath}/gp-surgery`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Update an existing GP Surgery
+     * update new Clinician
      * 
      * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateGpSurgery(body: GpSurgery, observe?: 'body', reportProgress?: boolean): Observable<GpSurgery>;
-    public updateGpSurgery(body: GpSurgery, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GpSurgery>>;
-    public updateGpSurgery(body: GpSurgery, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GpSurgery>>;
-    public updateGpSurgery(body: GpSurgery, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateClinician(body: Clinician, observe?: 'body', reportProgress?: boolean): Observable<Clinician>;
+    public updateClinician(body: Clinician, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Clinician>>;
+    public updateClinician(body: Clinician, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Clinician>>;
+    public updateClinician(body: Clinician, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateGpSurgery.');
+            throw new Error('Required parameter body was null or undefined when calling updateClinician.');
         }
 
         let headers = this.defaultHeaders;
@@ -272,7 +224,7 @@ export class GpSurgeryControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<GpSurgery>('put',`${this.basePath}/gp-surgery`,
+        return this.httpClient.request<Clinician>('put',`${this.basePath}/clinician`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -9,13 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Answer } from './answer';
 
-export interface UserResponse { 
-    responseId?: number;
-    questionId?: number;
-    conditionId?: string;
-    userId?: string;
-    answer?: Array<Answer>;
-    timestamp?: Date;
+export interface Registration { 
+    id?: string;
+    code?: string;
+    referenceId?: string;
 }

@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { ClinicianControllerService } from './api/clinicianController.service';
 import { GpControllerService } from './api/gpController.service';
 import { GpSurgeryControllerService } from './api/gpSurgeryController.service';
 import { HealthConditionControllerService } from './api/healthConditionController.service';
@@ -16,6 +17,7 @@ import { UserControllerService } from './api/userController.service';
   declarations: [],
   exports:      [],
   providers: [
+    ClinicianControllerService,
     GpControllerService,
     GpSurgeryControllerService,
     HealthConditionControllerService,

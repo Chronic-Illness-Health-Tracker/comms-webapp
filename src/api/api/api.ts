@@ -1,3 +1,5 @@
+export * from './clinicianController.service';
+import { ClinicianControllerService } from './clinicianController.service';
 export * from './gpController.service';
 import { GpControllerService } from './gpController.service';
 export * from './gpSurgeryController.service';
@@ -12,4 +14,4 @@ export * from './registrationController.service';
 import { RegistrationControllerService } from './registrationController.service';
 export * from './userController.service';
 import { UserControllerService } from './userController.service';
-export const APIS = [GpControllerService, GpSurgeryControllerService, HealthConditionControllerService, OrganisationControllerService, PatientControllerService, RegistrationControllerService, UserControllerService];
+export const APIS = [ClinicianControllerService, GpControllerService, GpSurgeryControllerService, HealthConditionControllerService, OrganisationControllerService, PatientControllerService, RegistrationControllerService, UserControllerService];

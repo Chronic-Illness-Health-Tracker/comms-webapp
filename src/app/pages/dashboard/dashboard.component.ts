@@ -82,10 +82,8 @@ export class DashboardComponent implements PageComponent, OnDestroy, OnInit {
 
     async loadPatients() {
         const patients = await lastValueFrom(this.patientService.getPatients());
-        console.log('LODED?');
 
         patients.forEach(patient => {
-            console.log(patient);
             patient.conditions?.forEach(condition => {
                 lastValueFrom(
                     this.patientService.getRecentStatus(

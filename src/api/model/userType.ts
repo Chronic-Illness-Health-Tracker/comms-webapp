@@ -10,5 +10,14 @@
  * Do not edit the class manually.
  */
 
-export interface User { 
+export interface UserType { 
+    id?: string;
+    type?: UserType.TypeEnum;
+}
+export namespace UserType {
+    export type TypeEnum = 'CLINITIAN' | 'PATIENT';
+    export const TypeEnum = {
+        CLINITIAN: 'CLINITIAN' as TypeEnum,
+        PATIENT: 'PATIENT' as TypeEnum
+    };
 }

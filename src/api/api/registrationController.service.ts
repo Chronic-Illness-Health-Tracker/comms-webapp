@@ -17,7 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { Patient } from '../model/patient';
+import { BaseUser } from '../model/baseUser';
+import { Registration } from '../model/registration';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -56,16 +57,58 @@ export class RegistrationControllerService {
 
 
     /**
-     * Link a user auth account to a user via an access code
+     * Check if a code is valid
+     * 
+     * @param registrationCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public codeValid(registrationCode: string, observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public codeValid(registrationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public codeValid(registrationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
+    public codeValid(registrationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (registrationCode === null || registrationCode === undefined) {
+            throw new Error('Required parameter registrationCode was null or undefined when calling codeValid.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*',
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<boolean>('put',`${this.basePath}/register/${encodeURIComponent(String(registrationCode))}/valid`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Create a new registration code
      * 
      * @param userId 
      * @param userType 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createRegistrationCode(userId: string, userType: string, observe?: 'body', reportProgress?: boolean): Observable<Patient>;
-    public createRegistrationCode(userId: string, userType: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Patient>>;
-    public createRegistrationCode(userId: string, userType: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Patient>>;
+    public createRegistrationCode(userId: string, userType: string, observe?: 'body', reportProgress?: boolean): Observable<Registration>;
+    public createRegistrationCode(userId: string, userType: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Registration>>;
+    public createRegistrationCode(userId: string, userType: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Registration>>;
     public createRegistrationCode(userId: string, userType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userId === null || userId === undefined) {
@@ -97,7 +140,7 @@ export class RegistrationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Patient>('put',`${this.basePath}/register/generate/${encodeURIComponent(String(userId))}`,
+        return this.httpClient.request<Registration>('post',`${this.basePath}/register/generate/${encodeURIComponent(String(userId))}`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -111,22 +154,30 @@ export class RegistrationControllerService {
     /**
      * Link a user auth account to a user via an access code
      * 
-     * @param body 
      * @param registrationCode 
+     * @param authId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public registerUser(body: string, registrationCode: string, observe?: 'body', reportProgress?: boolean): Observable<Patient>;
-    public registerUser(body: string, registrationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Patient>>;
-    public registerUser(body: string, registrationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Patient>>;
-    public registerUser(body: string, registrationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling registerUser.');
-        }
+    public registerUser(registrationCode: string, authId: string, observe?: 'body', reportProgress?: boolean): Observable<BaseUser>;
+    public registerUser(registrationCode: string, authId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BaseUser>>;
+    public registerUser(registrationCode: string, authId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BaseUser>>;
+    public registerUser(registrationCode: string, authId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (registrationCode === null || registrationCode === undefined) {
             throw new Error('Required parameter registrationCode was null or undefined when calling registerUser.');
+        }
+
+        if (authId === null || authId === undefined) {
+            throw new Error('Required parameter authId was null or undefined when calling registerUser.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (registrationCode !== undefined && registrationCode !== null) {
+            queryParameters = queryParameters.set('registrationCode', <any>registrationCode);
+        }
+        if (authId !== undefined && authId !== null) {
+            queryParameters = queryParameters.set('authId', <any>authId);
         }
 
         let headers = this.defaultHeaders;
@@ -143,16 +194,11 @@ export class RegistrationControllerService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
 
-        return this.httpClient.request<Patient>('put',`${this.basePath}/register/${encodeURIComponent(String(registrationCode))}`,
+        return this.httpClient.request<BaseUser>('put',`${this.basePath}/register`,
             {
-                body: body,
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

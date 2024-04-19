@@ -108,7 +108,6 @@ export class HealthConditionEditorComponent
     }
 
     createHealthCondition() {
-        console.log(this.condition);
         lastValueFrom(
             this.healthConditionService.createCondition(this.condition)
         )

@@ -1,16 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageComponent } from '../../base/page.component';
 import { HeaderService } from '../../svc/header.service';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PatientDetailsCardComponent } from '../../components/patient-details-card/patient-details-card.component';
 import { GpDetailsCardComponent } from '../../components/gp-details-card/gp-details-card.component';
 import { FormsModule } from '@angular/forms';
 import { Patient } from '../../../api/model/patient';
-import { Gp, HealthCondition, PatientControllerService } from '../../../api';
+import {
+    Gp,
+    HealthCondition,
+    PatientControllerService,
+    RegistrationControllerService,
+} from '../../../api';
 import { Subject, lastValueFrom, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { AddPatientCardComponent } from '../../components/add-patient-card/add-patient-card.component';
 import { SaveBarComponent } from '../../components/save-bar/save-bar.component';
+import { RegistrationCodeModalComponent } from '../../components/registration-code-modal/registration-code-modal.component';
 
 @Component({
     selector: 'app-patient-editor',
@@ -48,7 +54,9 @@ export class PatientEditorComponent
     constructor(
         private headerService: HeaderService,
         private patientService: PatientControllerService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private modalService: NgbModal,
+        private registrationService: RegistrationControllerService
     ) {}
 
     ngOnInit(): void {
@@ -120,8 +128,6 @@ export class PatientEditorComponent
     }
 
     savePatient() {
-        console.log(this._patientValid);
-        console.log(this._gpValid);
         this.submitted = true;
         if (this._patientValid && this._gpValid) {
             if (this.patient) {
@@ -131,7 +137,9 @@ export class PatientEditorComponent
                     lastValueFrom(
                         this.patientService.createPatient(this.patient)
                     )
-                        .then()
+                        .then(result => {
+                            this.createPatientRegistration(result.id!);
+                        })
                         .catch();
                 } else {
                     if (this.newConditionToAdd) {
@@ -145,5 +153,19 @@ export class PatientEditorComponent
                 }
             }
         }
+    }
+
+    createPatientRegistration(patientId: string) {
+        lastValueFrom(
+            this.registrationService.createRegistrationCode(
+                patientId,
+                'patient'
+            )
+        ).then(result => {
+            const modalRef = this.modalService.open(
+                RegistrationCodeModalComponent
+            );
+            modalRef.componentInstance.registrationCode = result.code;
+        });
     }
 }
