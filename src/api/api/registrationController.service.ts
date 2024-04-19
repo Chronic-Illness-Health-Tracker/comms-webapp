@@ -57,48 +57,6 @@ export class RegistrationControllerService {
 
 
     /**
-     * Check if a code is valid
-     * 
-     * @param registrationCode 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public codeValid(registrationCode: string, observe?: 'body', reportProgress?: boolean): Observable<boolean>;
-    public codeValid(registrationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
-    public codeValid(registrationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
-    public codeValid(registrationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (registrationCode === null || registrationCode === undefined) {
-            throw new Error('Required parameter registrationCode was null or undefined when calling codeValid.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*',
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<boolean>('put',`${this.basePath}/register/${encodeURIComponent(String(registrationCode))}/valid`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Create a new registration code
      * 
      * @param userId 
@@ -199,6 +157,48 @@ export class RegistrationControllerService {
         return this.httpClient.request<BaseUser>('put',`${this.basePath}/register`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Check if a code is valid
+     * 
+     * @param registrationCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public submitCode(registrationCode: string, observe?: 'body', reportProgress?: boolean): Observable<BaseUser>;
+    public submitCode(registrationCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BaseUser>>;
+    public submitCode(registrationCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BaseUser>>;
+    public submitCode(registrationCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (registrationCode === null || registrationCode === undefined) {
+            throw new Error('Required parameter registrationCode was null or undefined when calling submitCode.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*',
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<BaseUser>('put',`${this.basePath}/register/${encodeURIComponent(String(registrationCode))}`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

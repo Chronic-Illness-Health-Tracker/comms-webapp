@@ -17,6 +17,8 @@ import {
 import { lastValueFrom } from 'rxjs';
 import { UserService } from './svc/user.service';
 import { LoadingComponent } from './components/loading/loading.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { SidebarService } from './svc/sidebar.service';
 
 @Component({
     selector: 'app-root',
@@ -35,18 +37,9 @@ export class AppComponent implements OnInit {
         private authService: HelphiAuthService,
         private userController: UserControllerService,
         private router: Router,
-        private userService: UserService
+        private userService: UserService,
+        protected sidebarService: SidebarService
     ) {}
-
-    title = 'comms-webapp';
-
-    sidebarConfig: SidebarConfig = {
-        showAddDropdown: true,
-        canAddPatients: true,
-        canAddConditions: true,
-        addPatientRoute: ['patient', 'new'],
-        addConditionRoute: ['condition', 'new'],
-    };
 
     sidebarContent: Array<{ content: string; route: Array<string> }> = [];
 
@@ -68,11 +61,19 @@ export class AppComponent implements OnInit {
             this.userService.setUser(results[0]);
             this.userService.setUserType(results[1].type);
 
+            this.setSidebarConfig(results[1].type);
+
             if (this.router.url === '/') {
                 this.redirectToUserHome();
             }
         } catch (error) {
-            this.redirectToCreateAccount();
+            if (error instanceof HttpErrorResponse) {
+                if (error.status === 401) {
+                    //auth is already redirecting... slowly
+                } else {
+                    this.redirectToCreateAccount();
+                }
+            }
         }
 
         this.authenticated = true;
@@ -99,6 +100,31 @@ export class AppComponent implements OnInit {
             this.router.navigate(['clinician', 'dashboard']);
         } else if (userType === UserType.TypeEnum.PATIENT) {
             this.router.navigate(['patient', 'home']);
+        }
+    }
+
+    private setSidebarConfig(userType?: UserType.TypeEnum) {
+        if (userType === UserType.TypeEnum.CLINITIAN) {
+            const sidebarConfig = {
+                hideSidebar: false,
+                showAddDropdown: true,
+                canAddPatients: true,
+                canAddConditions: true,
+                addPatientRoute: ['clinician', 'patient', 'new'],
+                addConditionRoute: ['clinician', 'condition', 'new'],
+            };
+
+            this.sidebarService.sidebarConfig = sidebarConfig;
+        } else if (userType === UserType.TypeEnum.PATIENT) {
+            const sidebarConfig = {
+                hideSidebar: false,
+                showAddDropdown: false,
+                canAddPatients: false,
+                canAddConditions: false,
+                addPatientRoute: ['clinician', 'patient', 'new'],
+                addConditionRoute: ['clinician', 'condition', 'new'],
+            };
+            this.sidebarService.sidebarConfig = sidebarConfig;
         }
     }
 }

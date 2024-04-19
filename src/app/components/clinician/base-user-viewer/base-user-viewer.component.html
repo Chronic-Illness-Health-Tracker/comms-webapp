@@ -1,0 +1,90 @@
+<div class="card">
+    <div class="card-header">Patient details</div>
+    <div class="card-body">
+        <form [formGroup]="form">
+            <div class="row mt-1">
+                <div class="col-4 col-md-2 col-xxl-1">
+                    <label class="form-label">Title</label>
+                    <select formControlName="title" class="form-select">
+                        @for (item of titleValues; track $index) {
+                            <option [value]="item">{{ item }}</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-12 col-md-4 col-xxl-3">
+                    <label class="form-label">Forename</label>
+                    <input
+                        required
+                        formControlName="forename"
+                        type="text"
+                        class="form-control" />
+                </div>
+                <div class="col-12 col-md-6 col-xxl-4">
+                    <label class="form-label">Middle Names</label>
+                    <input
+                        formControlName="middlenames"
+                        type="text"
+                        class="form-control" />
+                </div>
+                <div class="col-12 col-xl-6 col-xxl-4">
+                    <label class="form-label">Lastname</label>
+                    <input
+                        formControlName="lastname"
+                        type="text"
+                        class="form-control" />
+                </div>
+            </div>
+            <div class="row my-2">
+                <div class="col-12">
+                    <h5 class="mt-2">Contact Details</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6 col-xxl-4">
+                    <label class="form-label">Email</label>
+                    <input
+                        formControlName="email"
+                        type="email"
+                        class="form-control" />
+                </div>
+                <div class="col-12 col-md-6 col-xxl-4">
+                    <label class="form-label">Contact Number</label>
+                    <input
+                        formControlName="contactNumber"
+                        type="tel"
+                        class="form-control" />
+                </div>
+                <div class="col-12 col-md-6 col-xxl-4">
+                    <label class="form-label">Alternate contact number</label>
+                    <input
+                        formControlName="alternateContactNumber"
+                        type="tel"
+                        class="form-control" />
+                </div>
+            </div>
+            <div formGroupName="address" class="row mt-1">
+                <div class="col-12 col-sm-4">
+                    <label class="form-label">Address Line One</label>
+                    <input
+                        formControlName="addresslineOne"
+                        type="text"
+                        class="form-control" />
+                </div>
+                <div class="col-12 col-sm-4">
+                    <label class="form-label">Address Line Two</label>
+                    <input
+                        formControlName="addresslineTwo"
+                        type="text"
+                        class="form-control" />
+                </div>
+                <div class="col-12 col-sm-4">
+                    <label class="form-label">Postcode</label>
+                    <input
+                        formControlName="postcode"
+                        type="text"
+                        class="form-control" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
