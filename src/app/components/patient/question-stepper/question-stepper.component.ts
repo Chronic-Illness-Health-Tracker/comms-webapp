@@ -6,7 +6,9 @@ import {
 } from '../../../../api';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { User } from '@auth0/auth0-angular';
-import { lastValueFrom } from 'rxjs';
+import { forkJoin, lastValueFrom } from 'rxjs';
+import { Severity, ToastService } from '../../../svc/toast.service';
+import { Route, Router } from '@angular/router';
 
 @Component({
     selector: 'app-question-stepper',
@@ -28,7 +30,9 @@ export class QuestionStepperComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private patientService: PatientControllerService
+        private patientService: PatientControllerService,
+        private toaster: ToastService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -138,10 +142,17 @@ export class QuestionStepperComponent implements OnInit {
     }
 
     sendQuestions() {
+        const promises: Array<Promise<UserResponse>> = [];
         this.userResponses.forEach(resonse => {
-            lastValueFrom(this.patientService.addAnswer(resonse)).then(
-                () => {}
+            const promise = lastValueFrom(
+                this.patientService.addAnswer(resonse)
             );
+            promises.push(promise);
+        });
+
+        lastValueFrom(forkJoin(promises)).then(() => {
+            this.toaster.show('questions sent!', Severity.success, 5000);
+            this.router.navigate(['patient', 'home']);
         });
     }
 }

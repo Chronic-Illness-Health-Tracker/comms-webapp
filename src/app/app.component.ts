@@ -20,11 +20,17 @@ import { UserService } from './svc/user.service';
 import { LoadingComponent } from './components/loading/loading.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SidebarService } from './svc/sidebar.service';
+import { ToasterComponent } from './components/toaster/toaster.component';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet, HelphiContainerComponent, LoadingComponent],
+    imports: [
+        RouterOutlet,
+        HelphiContainerComponent,
+        LoadingComponent,
+        ToasterComponent,
+    ],
     providers: [
         HealthConditionControllerService,
         UserControllerService,

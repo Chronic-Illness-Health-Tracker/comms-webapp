@@ -19,6 +19,7 @@ import { PageComponent } from '../../../base/page.component';
 import { HeaderService } from '../../../svc/header.service';
 import { CheckInEditorComponent } from '../../../components/clinician/check-in-editor/check-in-editor.component';
 import { AddOrganisationCardComponent } from '../../../components/clinician/add-organisation-card/add-organisation-card.component';
+import { Severity, ToastService } from '../../../svc/toast.service';
 
 @Component({
     selector: 'app-health-condition-editor',
@@ -60,7 +61,8 @@ export class HealthConditionEditorComponent
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private healthConditionService: HealthConditionControllerService,
-        private headerService: HeaderService
+        private headerService: HeaderService,
+        private toaster: ToastService
     ) {
         this.setHeader();
     }
@@ -113,17 +115,27 @@ export class HealthConditionEditorComponent
         lastValueFrom(
             this.healthConditionService.createCondition(this.condition)
         )
-            .then(() => {})
+            .then(() => {
+                this.toaster.show(
+                    'Created succesfully',
+                    Severity.success,
+                    5000
+                );
+            })
             .catch();
-
-        //lastValueFrom(this.healthConditionService.);
     }
 
     updateHealthCondition() {
         lastValueFrom(
             this.healthConditionService.updateCondition(this.condition)
         )
-            .then(() => {})
+            .then(() => {
+                this.toaster.show(
+                    'updated succesfully',
+                    Severity.success,
+                    5000
+                );
+            })
             .catch();
     }
 

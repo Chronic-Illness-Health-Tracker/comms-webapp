@@ -18,6 +18,7 @@ import { SaveBarComponent } from '../../../components/clinician/save-bar/save-ba
 import { RegistrationCodeModalComponent } from '../../../components/clinician/registration-code-modal/registration-code-modal.component';
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddPatientCardComponent } from '../../../components/clinician/add-patient-card/add-patient-card.component';
+import { Severity, Toast, ToastService } from '../../../svc/toast.service';
 
 @Component({
     selector: 'app-patient-editor',
@@ -57,7 +58,8 @@ export class PatientEditorComponent
         private patientService: PatientControllerService,
         private route: ActivatedRoute,
         private modalService: NgbModal,
-        private registrationService: RegistrationControllerService
+        private registrationService: RegistrationControllerService,
+        private toaster: ToastService
     ) {}
 
     ngOnInit(): void {
@@ -140,6 +142,11 @@ export class PatientEditorComponent
                     )
                         .then(result => {
                             this.createPatientRegistration(result.id!);
+                            this.toaster.show(
+                                'Patient created',
+                                Severity.success,
+                                5000
+                            );
                         })
                         .catch();
                 } else {
@@ -149,7 +156,13 @@ export class PatientEditorComponent
                     lastValueFrom(
                         this.patientService.updatePatient(this.patient)
                     )
-                        .then()
+                        .then(() => {
+                            this.toaster.show(
+                                'Patient updated',
+                                Severity.success,
+                                5000
+                            );
+                        })
                         .catch();
                 }
             }

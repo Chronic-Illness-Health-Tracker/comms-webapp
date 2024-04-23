@@ -80,7 +80,7 @@ export class CreateAccountComponent implements PageComponent, OnInit {
                     id!
                 )
             ).then(() => {
-                this.router.navigate(['']);
+                this.router.navigate(['patient', 'home']);
             });
         });
     }

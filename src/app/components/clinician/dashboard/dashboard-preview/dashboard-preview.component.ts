@@ -82,7 +82,7 @@ export class DashboardPreviewComponent implements OnInit {
     }
 
     viewAll() {
-        this.router.navigate(['dashboard'], {
+        this.router.navigate(['clinician', 'dashboard'], {
             queryParams: { extended: true },
         });
     }

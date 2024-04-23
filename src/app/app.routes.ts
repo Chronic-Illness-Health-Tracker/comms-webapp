@@ -3,7 +3,7 @@ import { DashboardComponent } from './pages/clinician/dashboard/dashboard.compon
 import { PatientEditorComponent } from './pages/clinician/patient-editor/patient-editor.component';
 import { HealthConditionEditorComponent } from './pages/clinician/health-condition-editor/health-condition-editor.component';
 import { PatientViewerComponent } from './pages/clinician/patient-viewer/patient-viewer.component';
-import { CreateAccountComponent } from './pages/clinician/create-account/create-account.component';
+import { CreateAccountComponent } from './pages/registration/create-account/create-account.component';
 import { VerifyLoginComponent } from '@helphi/helphi-common-ui';
 import { HomeComponent } from './pages/patient/home/home.component';
 import { ConditionCheckInComponent } from './pages/patient/condition-check-in/condition-check-in.component';
