@@ -1,5 +1,7 @@
 import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { Patient } from '../../../../../api';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-dashboard-preview-table',
@@ -14,6 +16,8 @@ export class DashboardPreviewTableComponent {
     protected sortedBy: string = '';
     protected sortedDirection: string = 'asc';
 
+    constructor(private router: Router) {}
+
     onSort(columnName: string) {
         if (this.sortedBy === columnName) {
             this.sortedDirection =
@@ -22,6 +26,10 @@ export class DashboardPreviewTableComponent {
 
         this.sortedBy = columnName;
         this.sort(columnName);
+    }
+
+    itemClicked(item: any) {
+        this.router.navigate(['clinician', 'patient', item.patientId]);
     }
 
     private sort(sortType: string) {

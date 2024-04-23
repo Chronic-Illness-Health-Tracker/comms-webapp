@@ -2,9 +2,11 @@ import {
     Component,
     EventEmitter,
     Input,
+    OnChanges,
     OnDestroy,
     OnInit,
     Output,
+    SimpleChanges,
 } from '@angular/core';
 import {
     FormGroup,
@@ -23,8 +25,9 @@ import { Question } from '../../../../api';
     templateUrl: './question-editor.component.html',
     styleUrl: './question-editor.component.scss',
 })
-export class QuestionEditorComponent implements OnInit, OnDestroy {
+export class QuestionEditorComponent implements OnInit, OnDestroy, OnChanges {
     private onDestroy$ = new Subject<boolean>();
+    private questionInput: boolean = false;
 
     @Input() question?: Question;
     @Output() questionChanged = new EventEmitter<Question>();
@@ -52,16 +55,7 @@ export class QuestionEditorComponent implements OnInit, OnDestroy {
     constructor(private fb: FormBuilder) {}
 
     ngOnInit(): void {
-        if (this.question) {
-            this.form.patchValue(this.question);
-
-            const scoreRange = this.form.get('answerScoreRange') as FormArray;
-
-            if (!scoreRange || scoreRange.length === 0) {
-                scoreRange.push(0);
-                scoreRange.push(0);
-            }
-        }
+        this.patchForm();
 
         this.form.valueChanges.pipe().subscribe(value => {
             this.questionTextChanged.emit(this.form.get('questionText')?.value);
@@ -70,6 +64,10 @@ export class QuestionEditorComponent implements OnInit, OnDestroy {
                 this.questionChanged.emit(question);
             }
         });
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.patchForm();
     }
 
     ngOnDestroy() {
@@ -95,5 +93,41 @@ export class QuestionEditorComponent implements OnInit, OnDestroy {
     removeAnswer(index: number) {
         const answers = this.form.get('possibleAnswers') as FormArray;
         answers.removeAt(index);
+    }
+
+    patchForm() {
+        if (this.question && !this.questionInput) {
+            this.questionInput = true;
+            console.log('question', this.question);
+            this.form.patchValue(this.question);
+
+            const scoreRange = this.form.get('answerScoreRange') as FormArray;
+
+            if (!scoreRange || scoreRange.length === 0) {
+                scoreRange.push(0);
+                scoreRange.push(0);
+            }
+
+            this.question.possibleAnswers?.forEach(answer => {
+                let answerText = answer.answerText;
+
+                if (answerText === undefined) {
+                    answerText = '';
+                }
+
+                const form = this.fb.nonNullable.group({
+                    answerText: this.fb.nonNullable.control<string>(
+                        answerText,
+                        Validators.required
+                    ),
+                    answerScore: this.fb.nonNullable.control<number>(
+                        answer.answerScore!,
+                        Validators.required
+                    ),
+                });
+                const answers = this.form.get('possibleAnswers') as FormArray;
+                answers.push(form);
+            });
+        }
     }
 }

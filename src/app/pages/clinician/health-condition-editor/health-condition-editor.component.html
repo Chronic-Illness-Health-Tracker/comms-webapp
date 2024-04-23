@@ -37,6 +37,8 @@
 @if (editMode) {
     <div class="row mt-2">
         <app-check-in-editor
+            [conditionCheckIn]="conditionCheckIn"
+            [questions]="questions"
             (checkInChanged)="onCheckInChanged($event)"
             (questionsChanged)="
                 onQuestionChanged($event)

@@ -40,6 +40,7 @@ export class DashboardComponent implements PageComponent, OnDestroy, OnInit {
     private onDestroy$ = new Subject<boolean>();
 
     tableData: Array<{
+        patientId: string;
         name: string;
         nhsNumber: string;
         conditionName: string;
@@ -97,6 +98,7 @@ export class DashboardComponent implements PageComponent, OnDestroy, OnInit {
                     const status = patientStatus.status!.toString();
 
                     const createdPatient = {
+                        patientId: patient.id!,
                         name: patientName,
                         nhsNumber: patientNhsNumber,
                         conditionName: conditionName,

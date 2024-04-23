@@ -34,7 +34,6 @@ export class DashboardPreviewComponent implements OnInit {
 
     ngOnInit(): void {
         this.filteredData = this.data;
-        console.log(this.extended);
     }
 
     private sort(sortType: string) {

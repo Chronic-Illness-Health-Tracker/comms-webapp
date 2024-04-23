@@ -1,0 +1,9 @@
+<div class="row mt-4">
+    <div class="col-12">
+        @if (questions) {
+            <app-question-stepper
+                [userId]="patientId"
+                [questions]="questions"></app-question-stepper>
+        }
+    </div>
+</div>

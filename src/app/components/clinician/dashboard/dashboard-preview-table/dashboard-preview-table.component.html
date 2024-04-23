@@ -61,7 +61,10 @@
     </thead>
     <tbody>
         @for (item of data; track item.nhsNumber) {
-            <tr class="table-card-row">
+            <tr
+                role="button"
+                (click)="itemClicked(item)"
+                class="table-card-row">
                 <td class="bg-primary border-secondary">
                     {{ item.name }}
                 </td>
@@ -75,10 +78,10 @@
                     <span
                         class="badge"
                         [ngClass]="{
-                            'text-bg-danger': item.conditionStatus === 'Unwell',
+                            'text-bg-danger': item.conditionStatus === 'unwell',
                             'text-bg-warning':
                                 item.conditionStatus === 'Sub-clinical',
-                            'text-bg-success': item.conditionStatus === 'Normal'
+                            'text-bg-success': item.conditionStatus === 'normal'
                         }"
                         >{{ item.conditionStatus }}</span
                     >

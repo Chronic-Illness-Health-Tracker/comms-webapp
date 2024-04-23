@@ -11,6 +11,7 @@ import {
     BaseUser,
     HealthCondition,
     HealthConditionControllerService,
+    PatientControllerService,
     UserControllerService,
     UserType,
 } from '../api';
@@ -24,7 +25,11 @@ import { SidebarService } from './svc/sidebar.service';
     selector: 'app-root',
     standalone: true,
     imports: [RouterOutlet, HelphiContainerComponent, LoadingComponent],
-    providers: [HealthConditionControllerService, UserControllerService],
+    providers: [
+        HealthConditionControllerService,
+        UserControllerService,
+        PatientControllerService,
+    ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
 })
@@ -38,7 +43,8 @@ export class AppComponent implements OnInit {
         private userController: UserControllerService,
         private router: Router,
         private userService: UserService,
-        protected sidebarService: SidebarService
+        protected sidebarService: SidebarService,
+        private patientService: PatientControllerService
     ) {}
 
     sidebarContent: Array<{ content: string; route: Array<string> }> = [];
@@ -76,18 +82,9 @@ export class AppComponent implements OnInit {
             }
         }
 
+        await this.getConditions();
+
         this.authenticated = true;
-
-        const conditions = await lastValueFrom(
-            this.healthConditionService.listHealthConditions()
-        );
-
-        this.sidebarContent = conditions.map(condition => {
-            return {
-                content: condition.name!,
-                route: ['condition', condition.id!],
-            };
-        });
     }
 
     private redirectToCreateAccount() {
@@ -125,6 +122,33 @@ export class AppComponent implements OnInit {
                 addConditionRoute: ['clinician', 'condition', 'new'],
             };
             this.sidebarService.sidebarConfig = sidebarConfig;
+        }
+    }
+
+    private async getConditions() {
+        const userType = this.userService.getUserType();
+
+        if (userType === UserType.TypeEnum.CLINITIAN) {
+            const conditions = await lastValueFrom(
+                this.healthConditionService.listHealthConditions()
+            );
+            this.sidebarContent = conditions.map(condition => {
+                return {
+                    content: condition.name!,
+                    route: ['clinician', 'condition', condition.id!, 'edit'],
+                };
+            });
+        } else if (userType === UserType.TypeEnum.PATIENT) {
+            const userId = this.userService.getUser()?.id;
+            const conditions = await lastValueFrom(
+                this.patientService.getConditions(userId!)
+            );
+            this.sidebarContent = conditions.map(condition => {
+                return {
+                    content: condition.name!,
+                    route: ['patient', 'condition', condition.id!],
+                };
+            });
         }
     }
 }

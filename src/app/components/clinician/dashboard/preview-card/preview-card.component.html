@@ -10,10 +10,10 @@
                 <span
                     class="badge fs-7"
                     [ngClass]="{
-                        'text-bg-danger': data.conditionStatus === 'Unwell',
+                        'text-bg-danger': data.conditionStatus === 'unwell',
                         'text-bg-warning':
                             data.conditionStatus === 'Sub-clinical',
-                        'text-bg-success': data.conditionStatus === 'Normal'
+                        'text-bg-success': data.conditionStatus === 'normal'
                     }"
                     >{{ data.conditionStatus }}</span
                 >

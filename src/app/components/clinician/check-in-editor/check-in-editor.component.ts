@@ -62,8 +62,6 @@ export class CheckInEditorComponent implements OnInit, OnDestroy, OnChanges {
             if (this.form.valid) {
                 this.checkInChanged.emit(this.form.value);
             }
-
-            console.log(this.form.value);
         });
     }
 

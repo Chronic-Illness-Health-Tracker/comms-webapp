@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mt-2">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -83,13 +83,13 @@
                     <div class="col-12 d-flex flex-wrap">
                         @for (condition of patient?.conditions; track $index) {
                             @if (condition.shortName) {
-                                <a class="me-4 text-nowrap mb-1">{{
-                                    condition.shortName
-                                }}</a>
+                                <h5 class="me-4 text-nowrap mb-1">
+                                    {{ condition.shortName }}
+                                </h5>
                             } @else {
-                                <a class="me-4 text-nowrap mb-1">{{
-                                    condition.name
-                                }}</a>
+                                <h5 class="me-4 text-nowrap mb-1">
+                                    {{ condition.name }}
+                                </h5>
                             }
                         }
                     </div>
@@ -98,8 +98,20 @@
         </div>
     </div>
 </div>
+<div class="row mt-2">
+    <div class="col-12">
+        <select
+            (change)="selectChanged($event)"
+            class="form-select"
+            aria-label="Default select example">
+            @for (condition of patientConditions; track $index) {
+                <option [value]="condition.id">{{ condition.name }}</option>
+            }
+        </select>
+    </div>
+</div>
 <div class="row mt-4">
-    <div class="col-6">
+    <div class="col-12 col-lg-6">
         <div class="card">
             <div class="card-body">
                 <table class="table">
@@ -111,25 +123,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>04/11/23</td>
-                            <td>10</td>
-                            <td>
-                                <div>
-                                    <span class="badge text-bg-danger"
-                                        >unwell</span
-                                    >
-                                </div>
-                            </td>
-                        </tr>
+                        @for (status of recentStatus; track $index) {
+                            <tr>
+                                <td>{{ status.timestamp | date }}</td>
+                                <td>{{ status.score }}</td>
+                                <td>
+                                    <div>
+                                        <span
+                                            class="badge"
+                                            [ngClass]="{
+                                                'text-bg-danger':
+                                                    status.status === 'unwell',
+                                                'text-bg-warning':
+                                                    status.status ===
+                                                    'Subclinical',
+                                                'text-bg-success':
+                                                    status.status === 'Normal'
+                                            }"
+                                            >{{ status.status }}</span
+                                        >
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
-    <div class="col-6">
-        <div class="card">
-            <div class="card-body"></div>
         </div>
     </div>
 </div>

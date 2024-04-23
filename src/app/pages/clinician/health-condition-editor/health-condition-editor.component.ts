@@ -82,6 +82,7 @@ export class HealthConditionEditorComponent
                 this.conditionId = params['conditionId'];
                 this.loadCondition();
                 this.loadCheckIn();
+                this.loadQuestions();
             }
         });
     }
@@ -104,6 +105,7 @@ export class HealthConditionEditorComponent
         }
         if (this.editMode) {
             this.saveQuestions();
+            this.saveCheckIn();
         }
     }
 
@@ -167,6 +169,16 @@ export class HealthConditionEditorComponent
             .catch(() => {});
     }
 
+    loadQuestions() {
+        lastValueFrom(
+            this.healthConditionService.getHealthConditionQuestions(
+                this.conditionId!
+            )
+        ).then(result => {
+            this.questions = result;
+        });
+    }
+
     patchForm() {
         this.conditionForm.controls['name'].setValue(this.condition.name);
         this.conditionForm.controls['shortName'].setValue(
@@ -179,6 +191,7 @@ export class HealthConditionEditorComponent
     }
 
     onCheckInChanged(checkIn: ConditionCheckIn) {
+        checkIn.conditionId = this.conditionId;
         this.conditionCheckIn = checkIn;
     }
 
@@ -189,5 +202,14 @@ export class HealthConditionEditorComponent
                 this.conditionId as string
             )
         ).then();
+    }
+
+    saveCheckIn() {
+        lastValueFrom(
+            this.healthConditionService.updateCheckIn(
+                this.conditionCheckIn!,
+                this.conditionId!
+            )
+        ).then(() => {});
     }
 }

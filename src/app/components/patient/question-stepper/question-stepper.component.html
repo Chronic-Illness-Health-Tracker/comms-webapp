@@ -1,0 +1,58 @@
+<div class="card">
+    <div class="card-body bg-secondary-subtle">
+        <div class="row">
+            <div class="col-12 d-flex flex-column align-items-center">
+                <h2 class="display-6">Question:</h2>
+                <h5>{{ currentQuestion.questionText }}</h5>
+            </div>
+        </div>
+        <div class="row my-4 p-4">
+            <div class="col-12">
+                <div class="row">
+                    @for (
+                        question of currentQuestion.possibleAnswers;
+                        track $index
+                    ) {
+                        <div
+                            class="col-12 col-lg-4 d-flex flex-column align-items-center justify-content-between">
+                            <label class="form-check-label fs-4 text-center">
+                                {{ question.answerText }}
+                            </label>
+                            <input
+                                (change)="onCheckChanged($event)"
+                                class="form-check-input helphi-checkbox"
+                                type="checkbox"
+                                [checked]="isChecked($index)"
+                                [value]="question.answerText" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                @if (step !== 0) {
+                    <button
+                        (click)="previousQuestion()"
+                        class="btn btn-primary">
+                        Previous question
+                    </button>
+                }
+
+                @if (step !== questions.length - 1) {
+                    <button
+                        (click)="nextQuestion()"
+                        class="btn btn-primary float-end">
+                        Next question
+                    </button>
+                } @else {
+                    <button
+                        (click)="finishQuestions()"
+                        class="btn btn-primary float-end">
+                        Finish
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
