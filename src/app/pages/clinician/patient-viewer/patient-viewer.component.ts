@@ -98,6 +98,7 @@ export class PatientViewerComponent
     }
 
     getStatus(conditionId: string) {
+        console.log('GETTING');
         lastValueFrom(
             this.patientController.getStatus(this.patientId, conditionId)
         ).then(result => {

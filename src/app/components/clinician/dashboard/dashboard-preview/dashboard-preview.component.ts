@@ -1,5 +1,11 @@
 import { NgClass } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnChanges,
+    OnInit,
+    SimpleChanges,
+} from '@angular/core';
 import { PreviewCardComponent } from '../preview-card/preview-card.component';
 import { FormsModule } from '@angular/forms';
 import { DashboardPreviewTableComponent } from '../dashboard-preview-table/dashboard-preview-table.component';
@@ -19,7 +25,10 @@ import { SearchComponent } from '../../search/search.component';
     templateUrl: './dashboard-preview.component.html',
     styleUrl: './dashboard-preview.component.scss',
 })
-export class DashboardPreviewComponent implements OnInit {
+export class DashboardPreviewComponent implements OnInit, OnChanges {
+    private _data: Array<any> = [];
+    private sortType: string = '';
+
     @Input({ required: true }) data!: Array<any>;
     @Input() extended!: boolean;
 
@@ -34,9 +43,20 @@ export class DashboardPreviewComponent implements OnInit {
 
     ngOnInit(): void {
         this.filteredData = this.data;
+        this._data = this.data;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (JSON.stringify(this._data) !== JSON.stringify(this.data)) {
+            this._data = this.data;
+            this.filteredData = this._data;
+            console.log(this.filteredData);
+            //this.sort(this.sortType);
+        }
     }
 
     private sort(sortType: string) {
+        this.sortType = sortType;
         switch (sortType) {
             case 'name':
                 this.filteredData.sort(this.sortByName);

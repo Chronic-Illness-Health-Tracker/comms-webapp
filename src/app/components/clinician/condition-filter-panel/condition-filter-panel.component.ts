@@ -23,7 +23,7 @@ export class ConditionFilterPanelComponent implements OnInit, OnDestroy {
     private onDestroy$ = new Subject<boolean>();
 
     @Input({ required: true }) items!: Array<HealthCondition>;
-    @Output() selectedItems = new EventEmitter<Array<string>>();
+    @Output() selectedItems = new EventEmitter<Array<HealthCondition>>();
 
     protected _selectedItems: Array<HealthCondition> = [];
 
@@ -83,6 +83,8 @@ export class ConditionFilterPanelComponent implements OnInit, OnDestroy {
         }
 
         this.selectedItemsNames = this._selectedItems.map(item => item.name);
+
+        this.selectedItems.emit(this._selectedItems);
     }
 
     searchChanged(search: string) {

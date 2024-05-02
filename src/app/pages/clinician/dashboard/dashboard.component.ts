@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { PageComponent } from '../../../base/page.component';
 import { HeaderService } from '../../../svc/header.service';
 import { ActivatedRoute } from '@angular/router';
@@ -37,9 +37,21 @@ export class DashboardComponent implements PageComponent, OnDestroy, OnInit {
     protected extended: boolean = false;
     protected conditions?: Array<HealthCondition>;
 
+    protected unwellPatients: number = 0;
+    protected normalPatients: number = 0;
+    protected subclinicalPatients: number = 0;
+    protected dontRender: boolean = false;
+
     private onDestroy$ = new Subject<boolean>();
 
     tableData: Array<{
+        patientId: string;
+        name: string;
+        nhsNumber: string;
+        conditionName: string;
+        conditionStatus: string;
+    }> = [];
+    filteredTableData: Array<{
         patientId: string;
         name: string;
         nhsNumber: string;
@@ -50,7 +62,8 @@ export class DashboardComponent implements PageComponent, OnDestroy, OnInit {
         private headerService: HeaderService,
         private activatedRoute: ActivatedRoute,
         private healthConditionService: HealthConditionControllerService,
-        private patientService: PatientControllerService
+        private patientService: PatientControllerService,
+        private ref: ChangeDetectorRef
     ) {
         this.setHeader();
 
@@ -106,8 +119,43 @@ export class DashboardComponent implements PageComponent, OnDestroy, OnInit {
                     };
 
                     this.tableData.push(createdPatient);
+                    this.filteredTableData.push(createdPatient);
+
+                    this.dontRender = true;
+                    this.ref.detectChanges();
+                    this.dontRender = false;
                 });
             });
         });
+    }
+
+    onFilterChanged(conditions: Array<HealthCondition>) {
+        this.filteredTableData = this.tableData.filter(item => {
+            const conditionName = item.conditionName;
+            return conditions.find(condition => {
+                return condition.shortName === conditionName;
+            });
+        });
+
+        this.unwellPatients = 0;
+        this.subclinicalPatients = 0;
+        this.normalPatients = 0;
+        this.filteredTableData.forEach(item => {
+            switch (item.conditionStatus) {
+                case 'unwell':
+                    this.unwellPatients++;
+                    break;
+                case 'Normal':
+                    this.normalPatients++;
+                    break;
+                case 'Subclinical':
+                    this.subclinicalPatients++;
+                    break;
+            }
+        });
+
+        this.dontRender = true;
+        this.ref.detectChanges();
+        this.dontRender = false;
     }
 }

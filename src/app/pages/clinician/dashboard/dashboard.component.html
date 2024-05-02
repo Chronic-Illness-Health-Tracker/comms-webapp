@@ -1,15 +1,16 @@
 <div class="row mt-2 mb-2">
-    <div class="col-12">
+    <!-- <div class="col-12">
         @if (conditions) {
             <app-condition-filter-panel
+                (selectedItems)="onFilterChanged($event)"
                 [items]="conditions"></app-condition-filter-panel>
         }
-    </div>
+    </div> -->
 </div>
 @if (extended === false) {
     <div class="row">
         <div class="col-12">
-            <app-charts [data]="[9, 0, 1]"></app-charts>
+            <app-charts [data]="[9, 1, 0]"></app-charts>
         </div>
     </div>
 }
@@ -18,6 +19,6 @@
     <div class="col-12 mt-2">
         <app-dashboard-preview
             [extended]="extended"
-            [data]="tableData"></app-dashboard-preview>
+            [data]="filteredTableData"></app-dashboard-preview>
     </div>
 </div>
