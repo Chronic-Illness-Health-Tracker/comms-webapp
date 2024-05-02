@@ -1,9 +1,23 @@
 <div class="row mt-4">
     <div class="col-12">
-        @if (questions) {
-            <app-question-stepper
-                [userId]="patientId"
-                [questions]="questions"></app-question-stepper>
+        @if (answeredToday) {
+            <div class="card">
+                <div class="card-body">
+                    <h4>
+                        You have checked in today for this condition! Please
+                        come back again tomorrow to keep tracking
+                    </h4>
+                    <h6 class="text-center">
+                        If you have any concerns do not hesitate to call your GP
+                    </h6>
+                </div>
+            </div>
+        } @else {
+            @if (questions) {
+                <app-question-stepper
+                    [userId]="patientId"
+                    [questions]="questions"></app-question-stepper>
+            }
         }
     </div>
 </div>

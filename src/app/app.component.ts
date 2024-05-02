@@ -75,6 +75,8 @@ export class AppComponent implements OnInit {
 
             this.setSidebarConfig(results[1].type);
 
+            await this.getConditions();
+
             if (this.router.url === '/') {
                 this.redirectToUserHome();
             }
@@ -88,8 +90,6 @@ export class AppComponent implements OnInit {
             }
         }
 
-        await this.getConditions();
-
         this.authenticated = true;
     }
 
@@ -102,7 +102,7 @@ export class AppComponent implements OnInit {
         if (userType === UserType.TypeEnum.CLINITIAN) {
             this.router.navigate(['clinician', 'dashboard']);
         } else if (userType === UserType.TypeEnum.PATIENT) {
-            this.router.navigate(['patient', 'home']);
+            this.router.navigate(this.sidebarContent[0].route);
         }
     }
 
