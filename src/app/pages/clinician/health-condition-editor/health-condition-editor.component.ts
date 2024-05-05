@@ -14,7 +14,7 @@ import {
 } from '@angular/forms';
 import { SaveBarComponent } from '../../../components/clinician/save-bar/save-bar.component';
 import { lastValueFrom, Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PageComponent } from '../../../base/page.component';
 import { HeaderService } from '../../../svc/header.service';
 import { CheckInEditorComponent } from '../../../components/clinician/check-in-editor/check-in-editor.component';
@@ -62,7 +62,8 @@ export class HealthConditionEditorComponent
         private route: ActivatedRoute,
         private healthConditionService: HealthConditionControllerService,
         private headerService: HeaderService,
-        private toaster: ToastService
+        private toaster: ToastService,
+        private router: Router
     ) {
         this.setHeader();
     }
@@ -121,6 +122,7 @@ export class HealthConditionEditorComponent
                     Severity.success,
                     5000
                 );
+                this.router.navigate(['clinician', 'dashboard']);
             })
             .catch();
     }

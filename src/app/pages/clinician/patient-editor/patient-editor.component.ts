@@ -148,7 +148,10 @@ export class PatientEditorComponent
                                 5000
                             );
                         })
-                        .catch();
+                        .catch(() => {
+                            this.toaster.show('There was an error creating the patient', Severity.danger, 5000);                
+                        }    
+                    );
                 } else {
                     if (this.newConditionToAdd) {
                         this.patient.conditions?.push(this.newConditionToAdd);
