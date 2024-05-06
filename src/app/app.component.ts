@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
         private authService: HelphiAuthService,
         private userController: UserControllerService,
         private router: Router,
-        private userService: UserService,
+        protected userService: UserService,
         protected sidebarService: SidebarService,
         private patientService: PatientControllerService
     ) {}

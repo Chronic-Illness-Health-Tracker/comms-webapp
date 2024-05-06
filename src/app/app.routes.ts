@@ -7,6 +7,8 @@ import { CreateAccountComponent } from './pages/registration/create-account/crea
 import { VerifyLoginComponent } from '@helphi/helphi-common-ui';
 import { HomeComponent } from './pages/patient/home/home.component';
 import { ConditionCheckInComponent } from './pages/patient/condition-check-in/condition-check-in.component';
+import { clinicianGuard } from './guards/clinician.guard';
+import { patientGuard } from './guards/patient.guard';
 
 export const routes: Routes = [
     { path: 'verify', component: VerifyLoginComponent },
@@ -17,17 +19,26 @@ export const routes: Routes = [
     {
         path: 'clinician',
         children: [
-            { path: 'dashboard', component: DashboardComponent },
+            {
+                path: 'dashboard',
+                component: DashboardComponent,
+                canActivate: [clinicianGuard],
+            },
             {
                 path: 'condition',
                 children: [
-                    { path: 'new', component: HealthConditionEditorComponent },
+                    {
+                        path: 'new',
+                        component: HealthConditionEditorComponent,
+                        canActivate: [clinicianGuard],
+                    },
                     {
                         path: ':conditionId',
                         children: [
                             {
                                 path: 'edit',
                                 component: HealthConditionEditorComponent,
+                                canActivate: [clinicianGuard],
                                 data: { editing: true },
                             },
                         ],
@@ -41,10 +52,12 @@ export const routes: Routes = [
                     {
                         path: ':patientId',
                         component: PatientViewerComponent,
+                        canActivate: [clinicianGuard],
                         children: [
                             {
                                 path: 'edit',
                                 component: PatientEditorComponent,
+                                canActivate: [clinicianGuard],
                                 data: { editing: true },
                             },
                         ],
@@ -56,9 +69,14 @@ export const routes: Routes = [
     {
         path: 'patient',
         children: [
-            { path: 'home', component: HomeComponent },
+            {
+                path: 'home',
+                component: HomeComponent,
+                canActivate: [patientGuard],
+            },
             {
                 path: 'condition',
+                canActivate: [patientGuard],
                 children: [
                     {
                         path: ':conditionId',

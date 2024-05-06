@@ -25,4 +25,8 @@ export class UserService {
     setUserType(userType?: UserType.TypeEnum) {
         this.userType = userType;
     }
+
+    getName() {
+        return `${this.user?.forename} ${this.user?.lastname}`;
+    }
 }
