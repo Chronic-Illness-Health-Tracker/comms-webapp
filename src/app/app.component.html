@@ -6,7 +6,8 @@
         profileRoute=""
         [sidebarContent]="sidebarContent"
         [title]="headerService.header"
-        [sidebarConfig]="sidebarService.sidebarConfig">
+        [sidebarConfig]="sidebarService.sidebarConfig"
+        [name]="userService.getName()">
         <router-outlet></router-outlet>
     </helphi-container>
 } @else {
