@@ -60,7 +60,7 @@
         </tr>
     </thead>
     <tbody>
-        @for (item of data; track item.nhsNumber) {
+        @for (item of data; track $index) {
             <tr
                 role="button"
                 (click)="itemClicked(item)"

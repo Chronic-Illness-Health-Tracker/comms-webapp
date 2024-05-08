@@ -53,7 +53,7 @@
             [ngClass]="{
                 'd-flex d-md-none': extended === false
             }">
-            @for (item of filteredData; track item.nhsNumber) {
+            @for (item of filteredData; track $index) {
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-2">
                     <app-preview-card [data]="item"></app-preview-card>
                 </div>

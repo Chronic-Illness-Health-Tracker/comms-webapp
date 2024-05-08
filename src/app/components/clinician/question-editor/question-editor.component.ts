@@ -98,7 +98,6 @@ export class QuestionEditorComponent implements OnInit, OnDestroy, OnChanges {
     patchForm() {
         if (this.question && !this.questionInput) {
             this.questionInput = true;
-            console.log('question', this.question);
             this.form.patchValue(this.question);
 
             const scoreRange = this.form.get('answerScoreRange') as FormArray;

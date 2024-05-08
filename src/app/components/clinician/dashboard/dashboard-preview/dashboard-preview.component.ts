@@ -50,8 +50,7 @@ export class DashboardPreviewComponent implements OnInit, OnChanges {
         if (JSON.stringify(this._data) !== JSON.stringify(this.data)) {
             this._data = this.data;
             this.filteredData = this._data;
-            console.log(this.filteredData);
-            //this.sort(this.sortType);
+            this.sort(this.sortType);
         }
     }
 
