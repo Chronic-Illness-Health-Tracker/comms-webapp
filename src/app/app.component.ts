@@ -76,6 +76,10 @@ export class AppComponent implements OnInit {
             this.setSidebarConfig(results[1].type);
 
             await this.getConditions();
+
+            if (this.router.url === '/') {
+                this.redirectToUserHome();
+            }
         } catch (error) {
             if (error instanceof HttpErrorResponse) {
                 if (error.status === 401) {
@@ -91,6 +95,15 @@ export class AppComponent implements OnInit {
 
     private redirectToCreateAccount() {
         this.router.navigate(['account', 'create']);
+    }
+
+    private redirectToUserHome() {
+        const userType = this.userService.getUserType();
+        if (userType === UserType.TypeEnum.CLINITIAN) {
+            this.router.navigate(['clinician', 'dashboard']);
+        } else if (userType === UserType.TypeEnum.PATIENT) {
+            this.router.navigate(this.sidebarContent[0].route);
+        }
     }
 
     private setSidebarConfig(userType?: UserType.TypeEnum) {

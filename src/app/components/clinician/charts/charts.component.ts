@@ -1,7 +1,17 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import {
+    Component,
+    HostListener,
+    Input,
+    OnChanges,
+    OnInit,
+    QueryList,
+    SimpleChanges,
+    ViewChild,
+    ViewChildren,
+} from '@angular/core';
 import { viewport } from '@popperjs/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { NgChartsModule } from 'ng2-charts';
+import { BaseChartDirective, NgChartsModule } from 'ng2-charts';
 
 @Component({
     selector: 'app-charts',
@@ -10,7 +20,7 @@ import { NgChartsModule } from 'ng2-charts';
     templateUrl: './charts.component.html',
     styleUrl: './charts.component.scss',
 })
-export class ChartsComponent implements OnInit {
+export class ChartsComponent implements OnInit, OnChanges {
     @Input({ required: true }) data!: Array<number>;
 
     private success = getComputedStyle(document.body).getPropertyValue(
@@ -44,6 +54,8 @@ export class ChartsComponent implements OnInit {
     protected chartOneOptions: ChartConfiguration['options'];
     protected chartData!: ChartData<ChartType, number[], string | string[]>;
 
+    @ViewChildren(BaseChartDirective) charts?: QueryList<BaseChartDirective>;
+
     constructor() {
         this.currentWidth = window.innerWidth;
         this.prefferedSmallChart = 'pie';
@@ -67,6 +79,14 @@ export class ChartsComponent implements OnInit {
                 },
             ],
         };
+    }
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.chartData?.datasets) {
+            this.chartData.datasets[0].data = this.data;
+            this.charts?.forEach(chart => {
+                chart?.update();
+            });
+        }
     }
 
     @HostListener('window:resize', ['$event'])

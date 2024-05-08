@@ -120,6 +120,7 @@ export class DashboardComponent implements PageComponent, OnDestroy, OnInit {
 
                     this.tableData.push(createdPatient);
                     this.filteredTableData.push(createdPatient);
+                    this.updatePatientsStatusList();
 
                     this.dontRender = true;
                     this.ref.detectChanges();
@@ -136,7 +137,10 @@ export class DashboardComponent implements PageComponent, OnDestroy, OnInit {
                 return condition.shortName === conditionName;
             });
         });
+        this.updatePatientsStatusList();
+    }
 
+    private updatePatientsStatusList() {
         this.unwellPatients = 0;
         this.subclinicalPatients = 0;
         this.normalPatients = 0;
@@ -153,9 +157,5 @@ export class DashboardComponent implements PageComponent, OnDestroy, OnInit {
                     break;
             }
         });
-
-        this.dontRender = true;
-        this.ref.detectChanges();
-        this.dontRender = false;
     }
 }
