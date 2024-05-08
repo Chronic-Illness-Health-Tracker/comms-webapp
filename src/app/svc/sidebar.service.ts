@@ -15,6 +15,8 @@ export class SidebarService {
         addConditionRoute: ['clinician', 'condition', 'new'],
     };
 
+    private _sidebarContent: Array<any> = [];
+
     constructor() {}
 
     get sidebarConfig(): SidebarConfig {
@@ -23,5 +25,13 @@ export class SidebarService {
 
     set sidebarConfig(sidebarConfig: SidebarConfig) {
         this._sidebarConfig = sidebarConfig;
+    }
+
+    get sideBarContent() {
+        return this._sidebarContent;
+    }
+
+    set sideBarContent(content: Array<any>) {
+        this._sidebarContent = content;
     }
 }

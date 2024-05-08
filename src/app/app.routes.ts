@@ -9,8 +9,10 @@ import { HomeComponent } from './pages/patient/home/home.component';
 import { ConditionCheckInComponent } from './pages/patient/condition-check-in/condition-check-in.component';
 import { clinicianGuard } from './guards/clinician.guard';
 import { patientGuard } from './guards/patient.guard';
+import { AlternateRedirectComponent } from './components/alternate-redirect/alternate-redirect.component';
 
 export const routes: Routes = [
+    { path: '', component: AlternateRedirectComponent },
     { path: 'verify', component: VerifyLoginComponent },
     {
         path: 'account',
