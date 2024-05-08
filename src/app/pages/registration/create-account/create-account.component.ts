@@ -9,6 +9,7 @@ import { HelphiAuthService } from '@helphi/helphi-common-ui';
 import { Router } from '@angular/router';
 import { SidebarService } from '../../../svc/sidebar.service';
 import { BaseUserViewerComponent } from '../../../components/clinician/base-user-viewer/base-user-viewer.component';
+import { Severity, ToastService } from '../../../svc/toast.service';
 
 @Component({
     selector: 'app-create-account',
@@ -31,7 +32,8 @@ export class CreateAccountComponent implements PageComponent, OnInit {
         private header: HeaderService,
         private authSerive: HelphiAuthService,
         private router: Router,
-        private sidebarService: SidebarService
+        private sidebarService: SidebarService,
+        private toaster: ToastService
     ) {
         this.setHeader();
     }
@@ -54,6 +56,7 @@ export class CreateAccountComponent implements PageComponent, OnInit {
     verifyCode() {
         if (this.registrationCode.length !== 12) {
             this.registrationCorrect = false;
+            this.toaster.show("Incorrect code", Severity.danger, 10000);
             return;
         }
 
@@ -66,6 +69,7 @@ export class CreateAccountComponent implements PageComponent, OnInit {
             })
             .catch(() => {
                 this.registrationCorrect = false;
+                this.toaster.show("This code is incorrect", Severity.danger, 10000);
             })
             .finally(() => {
                 this.codeChecked = true;
